@@ -3,7 +3,6 @@ package com.chen.autosendsms.ui;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -274,12 +273,7 @@ public class MainFragment extends Fragment {
 	
 	private void addPerson(Person person){
 		if(mPersonDao!=null){
-			try {
-				mPersonDao.save(person);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			mPersonDao.save(person);
 		}else{
 			Log.e("","mPersonDao ==null");
 			handler.sendEmptyMessage(1);
@@ -303,11 +297,7 @@ public class MainFragment extends Fragment {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					if(mPersonDao!=null){
-						try {
-							mPersonDao.delete(mList.get(position));
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
+						mPersonDao.delete(mList.get(position));
 						mList.remove(position);
 						mAdapter.notifyDataSetChanged();
 					}

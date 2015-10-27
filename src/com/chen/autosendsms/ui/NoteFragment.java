@@ -61,14 +61,10 @@ public class NoteFragment extends Fragment{
 						mNote=new Note();
 					}
 					mNote.setNote(noteStr);
-						try {
-							if(mNote.getId()<=0){
-								mNoteDao.save(mNote);
-							}else{
-								mNoteDao.update(mNote);
-							}
-						} catch (SQLException e) {
-							e.printStackTrace();
+						if(mNote.getId()<=0){
+							mNoteDao.save(mNote);
+						}else{
+							mNoteDao.update(mNote);
 						}
 						
 					Toast.makeText(getActivity(), "保存成功！", Toast.LENGTH_LONG).show();
@@ -85,12 +81,7 @@ public class NoteFragment extends Fragment{
 		if(mNoteDao==null){
 			Log.e("NoteActivity","mDaoFactory==null");
 		}else{
-			try {
-				mNote = mNoteDao.queryForTheFirst();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			mNote = mNoteDao.queryForTheFirst();
 			if(mNote!=null){
 				if(mNote.getNote()!=null&&mNote.getNote().length()>0){
 					tv_note.setText(mNote.getNote());

@@ -146,12 +146,7 @@ public class SendSMSService extends Service {
 
 			String content = "亲爱的战友，" + person.getLastName() + person.getFirstName() + "：";
 			Note note=null;
-			try {
-				note = mNoteDao.queryForTheFirst();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			note = mNoteDao.queryForTheFirst();
 			if (note != null && note.getNote() != null) {
 				Log.e("SendSMSService", "mnote不为空");
 				Utils.WriteLog("SendSMSService mnote不为空");
@@ -170,11 +165,7 @@ public class SendSMSService extends Service {
 			}
 			person.setDateSendSMS(System.currentTimeMillis() / 1000);
 			if (mPersonDao != null) {
-				try {
-					mPersonDao.update(person);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				mPersonDao.update(person);
 			}
 		} else {
 			Utils.WriteLog("SendSMSService 今天发送了");

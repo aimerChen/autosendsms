@@ -1,7 +1,5 @@
 package com.chen.autosendsms.ui;
 
-import java.sql.SQLException;
-
 import com.chen.autosendsms.R;
 import com.chen.autosendsms.db.dao.TimeDao;
 import com.chen.autosendsms.db.entities.MyTime;
@@ -58,15 +56,10 @@ public class SetTimeFragment extends Fragment{
 				}
 				mMyTime.setTime(time);
 				int saved=0;
-				try {
-					if(mMyTime.getId()<=0){
-						saved=mTimeDao.save(mMyTime);
-					}else{
-						saved=mTimeDao.update(mMyTime);
-					}
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if(mMyTime.getId()<=0){
+					saved=mTimeDao.save(mMyTime);
+				}else{
+					saved=mTimeDao.update(mMyTime);
 				}
 				if(saved>0){
 					Toast.makeText(getActivity(), "保存成功", Toast.LENGTH_SHORT).show();
@@ -90,11 +83,7 @@ public class SetTimeFragment extends Fragment{
 			Log.e("NoteActivity","mDaoFactory==null");
 		}else{
 			MyTime myTime=null;
-			try {
-				myTime = mTimeDao.queryForTheFirst();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			myTime = mTimeDao.queryForTheFirst();
 			mMyTime=myTime==null?null:myTime;
 			if(mMyTime!=null){
 				mEditText.setText(mMyTime.getTime()+"");

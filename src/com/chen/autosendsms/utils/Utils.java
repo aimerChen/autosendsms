@@ -112,12 +112,7 @@ public class Utils {
 	public static boolean isRightTime(Context context) {
 		List<MyTime> list=null;
 		MyTime time =null;
-		try {
-			list = new TimeDao(context).queryAll();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		list = new TimeDao(context).queryAll();
 		if (list == null||list.size()==0) {
 			return false;
 		}else{

@@ -1,7 +1,5 @@
 package com.chen.autosendsms.ui;
 
-import java.sql.SQLException;
-
 import com.chen.autosendsms.R;
 import com.chen.autosendsms.db.dao.PersonDao;
 import com.chen.autosendsms.db.entities.Person;
@@ -102,12 +100,7 @@ public class EditPersonActivity extends Activity{
 					mPerson.setLastName(lastName);
 					mPerson.setPhoneNumber(phoneNumber);
 					
-					try {
-						mPersonDao.update(mPerson);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					mPersonDao.update(mPerson);
 					Toast.makeText(getApplicationContext(), "修改成功", Toast.LENGTH_SHORT).show();
 
 					Utils.hiddenKeyBoard(getApplicationContext(), edt_birthday);

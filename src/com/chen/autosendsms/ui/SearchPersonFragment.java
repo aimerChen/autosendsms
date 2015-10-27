@@ -92,11 +92,7 @@ public class SearchPersonFragment extends Fragment{
     	if(mPersonDao==null){
     		return ;
     	}
-    	try {
-			mList=mPersonDao.queryAll();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+    	mList=mPersonDao.queryAll();
     	Toast.makeText(getActivity(), "共有"+mList.size()+"个联系人",Toast.LENGTH_SHORT).show();
     }
     
@@ -115,12 +111,7 @@ public class SearchPersonFragment extends Fragment{
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 			    	if(mPersonDao!=null){
-			    		try {
-							mPersonDao.delete(mList.get(position));
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+			    		mPersonDao.delete(mList.get(position));
 						mList.remove(position);
 						mAdapter.notifyDataSetChanged();
 			    	}
@@ -157,11 +148,7 @@ public class SearchPersonFragment extends Fragment{
         public void afterTextChanged(Editable s) {  
             // TODO Auto-generated method stub
         	if(temp==null||temp.length()==0){
-        		try {
-					list=mPersonDao.queryAll();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+        		list=mPersonDao.queryAll();
         		refreshListView();
         		return;
         	}

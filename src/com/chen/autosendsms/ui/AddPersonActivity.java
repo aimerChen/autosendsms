@@ -102,11 +102,7 @@ public class AddPersonActivity extends Activity{
 					person.setLastName(lastName);
 					person.setPhoneNumber(phoneNumber);
 					
-					try {
-						mPersonDao.save(person);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
+					mPersonDao.save(person);
 					Toast.makeText(getApplicationContext(), "添加成功", Toast.LENGTH_SHORT).show();
 
 					Utils.hiddenKeyBoard(getApplicationContext(), edt_birthday);
