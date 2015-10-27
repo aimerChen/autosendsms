@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.chen.autosendsms.db.DatabaseHelper;
 import com.chen.autosendsms.db.entities.Person;
 import com.chen.autosendsms.db.interfaces.PersonService;
 import com.chen.autosendsms.utils.Utils;
@@ -12,15 +13,17 @@ import com.j256.ormlite.dao.Dao;
 
 import android.content.Context;
 
-public class PersonDao  extends BaseDao<Person,Integer> implements PersonService{
+public class PersonDao extends BaseDao<Person,Integer> implements PersonService{
 	
+	private Context mContext;
 	public PersonDao(Context context) {
 		super(context);
+		mContext=context;
 	}
 	
 	@Override
 	public Dao<Person, Integer> getDao() throws SQLException {
-		return getHelper().getDao(Person.class);
+		return DatabaseHelper.getDatabaseHelper(mContext).getDao(Person.class);
 	}
 	
 	@Override

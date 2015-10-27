@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.chen.autosendsms.db.DatabaseHelper;
 import com.chen.autosendsms.utils.InvalidParamsException;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedQuery;
@@ -19,25 +17,16 @@ import android.content.Context;
 
 @SuppressWarnings("hiding")
 public abstract class  BaseDao<T, Integer> {
-	protected DatabaseHelper mDatabaseHelper;  
 	  
     protected Context mContext;  
   
     public BaseDao(Context context) {  
         mContext = context;  
-        getHelper();  
     }  
-  
-    public DatabaseHelper getHelper() {  
-        if (mDatabaseHelper == null) {  
-            mDatabaseHelper = OpenHelperManager.getHelper(mContext, DatabaseHelper.class);  
-        }  
-        return mDatabaseHelper;  
-    }  
-  
+
     public abstract Dao<T, Integer> getDao() throws SQLException;  
   
-    public int save(T t) throws SQLException {  
+    public int save(T t) throws SQLException {
         return getDao().create(t);  
     }  
   

@@ -20,7 +20,6 @@ import android.widget.Toast;
 public class SetTimeFragment extends Fragment{
 
 	private Button btn_save;
-//	private DaoFactory mDaoFactory;
 	private MyTime mMyTime=null;
 	private EditText mEditText;
 	private TimeDao mTimeDao=null;

@@ -1,5 +1,10 @@
 package com.chen.autosendsms.ui;
 
+import com.chen.autosendsms.R;
+import com.chen.autosendsms.db.DatabaseHelper;
+import com.chen.autosendsms.sendsmsservice.SendSMSService;
+import com.chen.autosendsms.utils.Utils;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -11,10 +16,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.chen.autosendsms.R;
-import com.chen.autosendsms.sendsmsservice.SendSMSService;
-import com.chen.autosendsms.utils.Utils;
 
+/**
+ * 关于数据库访问的方案1：在app启动时打开数据库，在app关闭时关闭数据库；其他时期不需要注意开关数据库
+ * 
+ * @author Administrator
+ *
+ */
 public class MenuActivity extends Activity{
 	private Button mBtn_listfragment;
 	private Button mBtn_searchfragment;
@@ -27,6 +35,7 @@ public class MenuActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
+		DatabaseHelper.getDatabaseHelper(getApplicationContext()).getWritableDatabase();
 		initial();
 		startService();
 		changeFramgent(0);
@@ -112,5 +121,11 @@ public class MenuActivity extends Activity{
 		transaction.replace(R.id.fragment_container,mFragments[order]);
 		//提交修改
 		transaction.commit();	
+	}
+	
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		DatabaseHelper.getDatabaseHelper(getApplicationContext()).close();
 	}
 }

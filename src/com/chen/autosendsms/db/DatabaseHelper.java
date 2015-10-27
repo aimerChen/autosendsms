@@ -14,8 +14,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 /**
- * 方案1：使用第三方包
- * 
  * Database helper class used to manage the creation and upgrading of your database. This class also usually provides
  * the DAOs used by the other classes.
  */
@@ -81,34 +79,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		}
 	}
 	
-/*	public synchronized Dao getDao(Class clazz) throws SQLException{
-	    Dao dao = null;  
-        String className = clazz.getSimpleName();  
-  
-        if (daos.containsKey(className))  
-        {  
-            dao = daos.get(className);  
-        }  
-        if (dao == null)  
-        {  
-            dao = super.getDao(clazz);  
-            daos.put(className, dao);  
-        }  
-        return dao;  
+	@Override
+	public void close(){
+		super.close();
+		instance=null;
 	}
-
-	  
-    *//** 
-     * 释放资源 
-     *//*  
-    @Override  
-    public void close()  
-    {  
-        super.close();  
-        for (String key : daos.keySet())  
-        {  
-			Dao dao = daos.get(key);  
-            dao = null;  
-        }  
-    }  */
 }
