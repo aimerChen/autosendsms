@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff" >
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottombar"
+        android:layout_below="@+id/titlebar" >
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/bottombar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#1E90FF"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/listfragment"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="#eedd82"
+            android:textSize="12sp"
+            android:text="列表" />
+
+        <Button
+            android:id="@+id/searchfragment"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:textSize="12sp"
+            android:background="#ffffe0"
+            android:text="搜索" />
+
+        <Button
+            android:id="@+id/notefragment"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:textSize="12sp"
+            android:background="#ffffe0"
+            android:text="短信内容" />
+
+        <Button
+            android:id="@+id/timefragment"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:textSize="12sp"
+            android:background="#ffffe0"
+            android:text="时间设定" />
+    </LinearLayout>
+
+</RelativeLayout>
