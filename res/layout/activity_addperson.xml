@@ -10,128 +10,172 @@
         android:layout_height="50dp"
         android:background="#ffffe0" >
 
-        <Button
+        <!-- <Button
             android:id="@+id/cancel"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="#eedd82"
-            android:text="返回"/>
-   <!--          android:src="@drawable/cancel"
-            android:textColor="#000000" /> -->
-
+            android:text="返回" /> -->
+		<TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="添加联系人"
+            android:textColor="#000000"
+            android:textSize="20sp" />
         <Button
             android:id="@+id/ok"
-            android:layout_width="70dp"
-            android:layout_height="45dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:layout_margin="2dp"
             android:background="#eedd82"
             android:gravity="center"
-            android:text="保存"/>
-<!--             android:scaleType="fitXY"
-            android:src="@drawable/ok" /> -->
+            android:text="保存" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/title"
-        android:background="#ffffff" >
+        android:background="#ffffff"
+        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="50dp"
-            android:layout_height="36dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="6dp"
-            android:gravity="center"
-            android:text="姓:"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/lastname"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="3dp"
-            android:layout_toRightOf="@+id/textView1"
-            android:ems="10"
-            android:inputType="textPersonName" >
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff" >
 
-            <requestFocus />
-        </EditText>
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"
+                android:text="姓:"
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="50dp"
-            android:layout_height="36dp"
-            android:layout_below="@+id/textView1"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="50dp"
-            android:gravity="center"
-            android:text="名字:"
-            android:textColor="#000000"
-            android:textSize="20sp" />
+            <EditText
+                android:id="@+id/lastname"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="3dp"
+                android:layout_toRightOf="@+id/textView1"
+                android:background="@drawable/bg_edittext"
+                android:inputType="textPersonName"
+                android:paddingLeft="5dp"
+                android:textSize="14sp" >
 
-        <EditText
-            android:id="@+id/firstname"
+                <requestFocus />
+            </EditText>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lastname"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="43dp"
-            android:layout_toRightOf="@+id/textView2"
-            android:ems="10"
-            android:inputType="textPersonName" >
-        </EditText>
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff" >
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="50dp"
-            android:layout_height="36dp"
-            android:layout_below="@+id/textView2"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="50dp"
-            android:gravity="center"
-            android:text="电话:"
-            android:textColor="#000000"
-            android:textSize="20sp" />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"
+                android:text="名字:"
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/phonenumber"
+            <EditText
+                android:id="@+id/firstname"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/textView2"
+                android:background="@drawable/bg_edittext"
+                android:inputType="textPersonName"
+                android:paddingLeft="5dp"
+                android:textSize="14sp" >
+            </EditText>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/textView3"
-            android:layout_alignLeft="@+id/firstname"
-            android:layout_marginRight="10dp"
-            android:ems="10"
-            android:inputType="phone" />
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff" >
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="50dp"
-            android:layout_height="36dp"
-            android:layout_below="@+id/textView3"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="50dp"
-            android:gravity="center"
-            android:text="生日:"
-            android:textColor="#000000"
-            android:textSize="20sp" />
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"
+                android:text="电话:"
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/birthday"
+            <EditText
+                android:id="@+id/phonenumber"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/textView3"
+                android:background="@drawable/bg_edittext"
+                android:inputType="phone"
+                android:paddingLeft="5dp"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/phonenumber"
-            android:layout_alignTop="@+id/textView4"
-            android:layout_marginRight="10dp"
-            android:ems="10"
-            android:hint="格式:1988-10-30"
-            android:inputType="date" />
-    </RelativeLayout>
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff" >
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"
+                android:layout_alignParentTop="true"
+                android:text="生日:"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/birthday_lin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/textView4"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp" >
+
+                <kankan.wheel.widget.WheelView
+                    android:id="@+id/year"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent" />
+
+                <kankan.wheel.widget.WheelView
+                    android:id="@+id/month"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent" />
+
+                <kankan.wheel.widget.WheelView
+                    android:id="@+id/day"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

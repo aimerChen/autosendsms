@@ -11,16 +11,15 @@
         android:layout_height="50dp"
         android:background="#ffffe0" >
 
-        <Button
+       <!--  <Button
             android:id="@+id/importPeople"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
             android:background="#eedd82"
             android:text="导入" />
-        <!--
+       
              <Button
             android:id="@+id/changeMessage"
             android:layout_width="50dp"
@@ -47,7 +46,6 @@
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
             android:background="#eedd82"
             android:text="添加" />
     </RelativeLayout>

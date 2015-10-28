@@ -36,9 +36,16 @@
             android:layout_weight="1"
             android:textSize="12sp"
             android:background="#ffffe0"
-            android:text="搜索" />
-
-        <Button
+            android:text="联系人" />
+		<Button
+            android:id="@+id/settingfragment"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:textSize="12sp"
+            android:background="#ffffe0"
+            android:text="设置" />
+        <!-- <Button
             android:id="@+id/notefragment"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -54,7 +61,7 @@
             android:layout_weight="1"
             android:textSize="12sp"
             android:background="#ffffe0"
-            android:text="时间设定" />
+            android:text="时间设定" /> -->
     </LinearLayout>
 
 </RelativeLayout>

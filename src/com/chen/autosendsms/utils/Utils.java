@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -110,23 +109,20 @@ public class Utils {
 	 * @return
 	 */
 	public static boolean isRightTime(Context context) {
-		List<MyTime> list=null;
-		MyTime time =null;
-		list = new TimeDao(context).queryAll();
-		if (list == null||list.size()==0) {
-			return false;
-		}else{
-			time = list.get(0);
-		}
-		if (time.getTime() > 24 || time.getTime() < 0) {
-			return false;
-		}
+		TimeDao dao= new TimeDao(context);
+		MyTime time =dao.queryForTheFirst();
 		boolean isRightTime = false;
-		Calendar calendar = Calendar.getInstance();
-		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		if (hour == time.getTime()) {
-			isRightTime = true;
+		if(time!=null){
+			if (time.getTime() > 24 || time.getTime() < 0) {
+				return false;
+			}
+			Calendar calendar = Calendar.getInstance();
+			int hour = calendar.get(Calendar.HOUR_OF_DAY);
+			if (hour == time.getTime()) {
+				isRightTime = true;
+			}
 		}
+		dao=null;
 		return isRightTime;
 	}
 
@@ -159,6 +155,18 @@ public class Utils {
 		return sdf.format(new Date(ts * 1000));
 	}
 
+	@SuppressLint("SimpleDateFormat")
+	public static int[] getBirthdayArray(long ts) {
+		int[] result=new int[3];
+		Calendar cal=Calendar.getInstance();
+		cal.setTimeInMillis(ts*1000);
+		result[0]=cal.get(Calendar.YEAR);
+		result[1]=cal.get(Calendar.MONTH+1);
+		result[2]=cal.get(Calendar.DAY_OF_MONTH);
+		return result;
+	}
+	
+	
 	/**
 	 * 生日的月和日
 	 * 
@@ -178,7 +186,7 @@ public class Utils {
 
 	@SuppressLint("SimpleDateFormat")
 	public static long stringToLong(String date) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		long ts = 0;
 		try {
 			ts = sdf.parse(date).getTime() / 1000;

@@ -31,21 +31,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.chen.autosendsms.ui.AddPersonActivity"
+            android:name="com.chen.autosendsms.ui.contacts.AddPersonActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.chen.autosendsms.ui.EditPersonActivity"
+            android:name="com.chen.autosendsms.ui.contacts.EditPersonActivitynActivity"
             android:screenOrientation="portrait" >
         </activity>
        <!--  <activity
             android:name="com.chen.autosendsms.ui.SearchPersonActivity"
             android:screenOrientation="portrait" >
-        </activity>
+        </activity>-->
         <activity
-            android:name="com.chen.autosendsms.ui.NoteActivity"
+            android:name="com.chen.autosendsms.ui.setting.NoteActivity"
             android:screenOrientation="portrait" >
-        </activity> -->
+        </activity> 
 
         <receiver android:name="com.chen.autosendsms.receiver.BootBroadcastReceiver" >
             <intent-filter>

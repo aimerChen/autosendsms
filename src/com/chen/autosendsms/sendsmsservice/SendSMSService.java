@@ -1,6 +1,5 @@
 package com.chen.autosendsms.sendsmsservice;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -203,7 +202,7 @@ public class SendSMSService extends Service {
 				public void run() {
 					while (true) {
 						if (!Utils.isServiceAlive(SendSMSService.this,
-								"com.chen.autosendsms.sendsmsservice。GuardService")) {
+								"com.chen.autosendsms.sendsmsservice.GuardService")) {
 							System.out.println("检测到服务GuardService不存在.....");
 							Intent intent=new Intent();
 					    	intent.setClass(getApplicationContext(), GuardService.class);

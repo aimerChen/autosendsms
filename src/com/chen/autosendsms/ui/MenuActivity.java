@@ -3,6 +3,9 @@ package com.chen.autosendsms.ui;
 import com.chen.autosendsms.R;
 import com.chen.autosendsms.db.DatabaseHelper;
 import com.chen.autosendsms.sendsmsservice.SendSMSService;
+import com.chen.autosendsms.ui.contacts.SearchPersonFragment;
+import com.chen.autosendsms.ui.list.ListFragment;
+import com.chen.autosendsms.ui.setting.SettingFragment;
 import com.chen.autosendsms.utils.Utils;
 
 import android.app.Activity;
@@ -23,81 +26,44 @@ import android.widget.Button;
  * @author Administrator
  *
  */
-public class MenuActivity extends Activity{
+public class MenuActivity extends Activity implements OnClickListener{
 	private Button mBtn_listfragment;
 	private Button mBtn_searchfragment;
-	private Button mBtn_notefragment;
-	private Button mBtn_timefragment;
+	private Button mBtn_settingfragment;
 	private Button mButtons[];
 	private Fragment[] mFragments;
 	private FragmentManager mFragmentManager;
+	private int FRAGMENT_NUMBER=3;
+	private int mCurrentFragment=0;
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
 		DatabaseHelper.getDatabaseHelper(getApplicationContext()).getWritableDatabase();
 		initial();
+		changeFramgent();
 		startService();
-		changeFramgent(0);
 	}
 	
 	private void initial(){
 		mBtn_listfragment=(Button)findViewById(R.id.listfragment);
 		mBtn_searchfragment=(Button)findViewById(R.id.searchfragment);
-		mBtn_notefragment=(Button)findViewById(R.id.notefragment);
-		mBtn_timefragment=(Button)findViewById(R.id.timefragment);
+		mBtn_settingfragment=(Button)findViewById(R.id.settingfragment);
 		
 		mFragmentManager=getFragmentManager();
         //mFragments
-        mFragments=new Fragment[4];
-        mFragments[0]=new MainFragment();
+        mFragments=new Fragment[FRAGMENT_NUMBER];
+        mFragments[0]=new ListFragment();
         mFragments[1]=new SearchPersonFragment();
-        mFragments[2]=new NoteFragment();
-        mFragments[3]=new SetTimeFragment();
+        mFragments[2]=new SettingFragment();
         
-        mButtons=new Button[4];
+        mButtons=new Button[FRAGMENT_NUMBER];
         mButtons[0]=mBtn_listfragment;
 		mButtons[1]=mBtn_searchfragment;
-		mButtons[2]=mBtn_notefragment;
-		mButtons[3]=mBtn_timefragment;
-        		
-       
-        mBtn_listfragment.setOnClickListener(new OnClickListener(){
-
- 			@Override
- 			public void onClick(View v) {
- 				changeFramgent(0);
- 			}
-         	
-         });
-        
-        mBtn_searchfragment.setOnClickListener(new OnClickListener(){
-
- 			@Override
- 			public void onClick(View v) {
- 				changeFramgent(1);
- 			}
-         	
-         });
-        
-        mBtn_notefragment.setOnClickListener(new OnClickListener(){
-
- 			@Override
- 			public void onClick(View v) {
- 				changeFramgent(2);
- 			}
-         	
-         });        
-        
-        mBtn_timefragment.setOnClickListener(new OnClickListener(){
-
-  			@Override
-  			public void onClick(View v) {
-  				changeFramgent(3);
-  			}
-          	
-          });
-	
+		mButtons[2]=mBtn_settingfragment;
+		for(int i=0;i<FRAGMENT_NUMBER;i++){
+			 mButtons[i].setOnClickListener(this);
+		}
 	}
     
     private void startService(){
@@ -106,11 +72,27 @@ public class MenuActivity extends Activity{
     	intent.setClass(getApplicationContext(), SendSMSService.class);
     	startService(intent);
     }
-	
-	private void changeFramgent(int order){
-		for(int i=0;i<4;i++){
+
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()){
+		case R.id.listfragment:
+			mCurrentFragment=0;
+			break;
+		case R.id.searchfragment:
+			mCurrentFragment=1;
+			break;
+		case R.id.settingfragment:
+			mCurrentFragment=2;
+			break;
+		}
+		changeFramgent();
+	}
+    
+	private void changeFramgent(){
+		for(int i=0;i<FRAGMENT_NUMBER;i++){
 			mButtons[i].setBackgroundColor(Color.parseColor("#ffffe0"));
-			if(i==order){
+			if(i==mCurrentFragment){
 				mButtons[i].setBackgroundColor(Color.parseColor("#eedd82"));
 			}
 		}
@@ -118,7 +100,7 @@ public class MenuActivity extends Activity{
 		//创建修改实例
 		FragmentTransaction transaction =mFragmentManager.beginTransaction();
 		// and add the transaction to the backstack
-		transaction.replace(R.id.fragment_container,mFragments[order]);
+		transaction.replace(R.id.fragment_container,mFragments[mCurrentFragment]);
 		//提交修改
 		transaction.commit();	
 	}
@@ -128,4 +110,5 @@ public class MenuActivity extends Activity{
 		super.onDestroy();
 		DatabaseHelper.getDatabaseHelper(getApplicationContext()).close();
 	}
+
 }

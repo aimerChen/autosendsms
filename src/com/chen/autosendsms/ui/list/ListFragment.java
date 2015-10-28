@@ -1,4 +1,4 @@
-package com.chen.autosendsms.ui;
+package com.chen.autosendsms.ui.list;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +9,8 @@ import java.util.List;
 import com.chen.autosendsms.R;
 import com.chen.autosendsms.db.dao.PersonDao;
 import com.chen.autosendsms.db.entities.Person;
+import com.chen.autosendsms.ui.contacts.AddPersonActivity;
+import com.chen.autosendsms.ui.contacts.EditPersonActivity;
 import com.chen.autosendsms.utils.Utils;
 
 import android.annotation.SuppressLint;
@@ -39,7 +41,7 @@ import jxl.Sheet;
 import jxl.Workbook;
 
 
-public class MainFragment extends Fragment {
+public class ListFragment extends Fragment {
 
 //	private DaoFactory mDaoFactory=null;
 	private PersonDao mPersonDao=null;
@@ -47,7 +49,7 @@ public class MainFragment extends Fragment {
 	private MyAdapter mAdapter;
 	private List<Person> mList;
 
-	private Button importPeople;
+//	private Button importPeople;
 
 	private Button mImg_Btn_addPerson;
 	//	private Button mImg_Btn_changeMessage;
@@ -106,15 +108,15 @@ public class MainFragment extends Fragment {
 
 		});
 
-		importPeople=(Button)view.findViewById(R.id.importPeople);
-		importPeople.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				importPeople();
-			}
-
-		});
+//		importPeople=(Button)view.findViewById(R.id.importPeople);
+//		importPeople.setOnClickListener(new OnClickListener(){
+//
+//			@Override
+//			public void onClick(View v) {
+//				importPeople();
+//			}
+//
+//		});
 		//        mImg_Btn_changeMessage=(Button)view.findViewById(R.id.changeMessage);
 		//        mImg_Btn_changeMessage.setOnClickListener(new OnClickListener(){
 		//
@@ -291,7 +293,7 @@ public class MainFragment extends Fragment {
 
 	private void deleteAlert(final int position){
 		if(mList.get(position)!=null){
-			AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
+			AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
 			builder.setTitle("要删除这个联系人码？").setPositiveButton("确定", new DialogInterface.OnClickListener(){
 
 				@Override

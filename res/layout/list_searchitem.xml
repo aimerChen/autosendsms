@@ -15,7 +15,6 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
             android:gravity="center"
             android:text="Name"
             android:textColor="#000000" />
@@ -26,7 +25,6 @@
             android:layout_height="30dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/name"
-            android:layout_marginLeft="10dp"
             android:gravity="center"
             android:textColor="#000000"
             android:text="13662149999" />

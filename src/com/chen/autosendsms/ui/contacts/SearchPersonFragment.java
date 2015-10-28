@@ -1,6 +1,5 @@
-package com.chen.autosendsms.ui;
+package com.chen.autosendsms.ui.contacts;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,26 +27,18 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SearchPersonFragment extends Fragment{
 	
-//	private DaoFactory mDaoFactory=null;
 	private PersonDao mPersonDao=null;
 	private EditText mEditTextSearch;
+	private TextView txt_contactsNumber;
 	private ListView mListView;
 	private List<Person> mList;
 	private MySearchAdapter mAdapter;
 	private List<Person> list;
 
 	private AlertDialog dialog=null;
-//	@Override
-//	public void onCreate(Bundle savedInstanceState){
-//		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_searchperson);
-//		intial();
-//	}
-//	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -61,6 +52,7 @@ public class SearchPersonFragment extends Fragment{
 	public void onResume(){
 		super.onResume();
         getDataFromDatabase();
+        setContactNumberText();
         mAdapter.notifyDataSetChanged();
 	}
 	
@@ -71,21 +63,20 @@ public class SearchPersonFragment extends Fragment{
 	}
 
 	private void initial(ViewGroup view){
-//        mDaoFactory=DaoFactory.getDaoFactory(getActivity());
-//        if(mDaoFactory!=null){
-//        	mPersonDao=mDaoFactory.getPersonDao();
-//        }
-		
 		mPersonDao=new PersonDao(getActivity());
 		mEditTextSearch=(EditText)view.findViewById(R.id.search);
 		mEditTextSearch.addTextChangedListener(mTextWatcher); 
-		
+		txt_contactsNumber=(TextView)view.findViewById(R.id.contactsNumber);
+		txt_contactsNumber.setText("0");
 		mListView=(ListView)view.findViewById(R.id.searchList);
 		mList=new ArrayList<Person>();
 		list=new ArrayList<Person>();
 		getDataFromDatabase();
 		mAdapter=new MySearchAdapter();
 		mListView.setAdapter(mAdapter);
+		
+
+		setContactNumberText();
 	}
 	
     private void getDataFromDatabase(){
@@ -93,7 +84,12 @@ public class SearchPersonFragment extends Fragment{
     		return ;
     	}
     	mList=mPersonDao.queryAll();
-    	Toast.makeText(getActivity(), "共有"+mList.size()+"个联系人",Toast.LENGTH_SHORT).show();
+    }
+    
+    private void setContactNumberText(){
+    	if(mList!=null&&mList.size()>0){
+        	txt_contactsNumber.setText(""+mList.size());
+    	}
     }
     
     private void refreshListView(){
@@ -131,7 +127,7 @@ public class SearchPersonFragment extends Fragment{
 		}
 	}
     
-    TextWatcher mTextWatcher = new TextWatcher() {  
+    private TextWatcher mTextWatcher = new TextWatcher() {  
         private CharSequence temp;
         @Override  
         public void onTextChanged(CharSequence s, int start, int before, int count) {  
@@ -158,7 +154,6 @@ public class SearchPersonFragment extends Fragment{
     		list=mPersonDao.getPeopleByCondition(condition);
         }  
     };  
-	
 	
 	  
     /**

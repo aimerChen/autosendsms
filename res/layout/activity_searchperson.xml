@@ -9,57 +9,93 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#ffffe0" >
-		<TextView 
-		    android:layout_height="match_parent"
-		    android:layout_width="wrap_content"
-		    android:text="搜索"
-		    android:textColor="#000000"
-		    android:textSize="20sp"
-		    android:layout_centerHorizontal="true"
-		    android:gravity="center"/>
-<!--         <Button
-            android:id="@+id/cancel"
-            android:layout_width="70dp"
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_margin="2dp"
-            android:background="#eedd82"
-            android:text="返回" /> -->
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="联系人"
+            android:textColor="#000000"
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rel1"
+        android:id="@+id/rel2"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="75dp"
         android:layout_below="@+id/title"
-        android:background="#F0EBE6" >
-
-        <EditText
+        android:layout_marginTop="5dp" 
+        android:layout_marginLeft="5dp" 
+        android:layout_marginRight="5dp" >
+  		<EditText
+            android:layout_marginTop="5dp"
             android:id="@+id/search"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="3dp"
-            android:ems="10"
+            android:background="@drawable/bg_edittext"
+            android:textSize="14sp"
             android:hint="请输入要查找的人名"
-            android:inputType="textPersonName" >
+            android:inputType="textPersonName"
+            android:paddingLeft="5dp" >
 
             <requestFocus />
         </EditText>
+	    <RelativeLayout
+	        android:id="@+id/rel2_top"
+            android:layout_below="@+id/search"
+	        android:layout_width="match_parent"
+	        android:layout_height="30dp">
+	
+	        <TextView
+	     	    android:layout_toLeftOf="@+id/contactsNumber"
+	     	    android:id="@+id/des_contact"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:gravity="center"
+	            android:text="共有"
+	            android:textColor="#696969"
+	            android:textSize="14sp" />
+	     	<TextView
+	     	    android:layout_toLeftOf="@+id/des_contact2"
+	     	    android:id="@+id/contactsNumber"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:gravity="center"
+	            android:text="1"
+	            android:textColor="#696969"
+	            android:textSize="14sp" />
+	     	<TextView
+	     	    android:id="@+id/des_contact2"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:gravity="center"
+	            android:text="个联系人"
+	            android:layout_alignParentRight="true"
+	            android:textColor="#696969"
+	            android:layout_marginRight="5dp"
+	            android:textSize="14sp" />
+	    </RelativeLayout>
     </RelativeLayout>
-	<View
-	    android:layout_marginLeft="5dp"
-	    android:layout_marginRight="5dp"
-        android:layout_below="@+id/rel1"
-	    android:layout_width="match_parent"
-	    android:layout_height="1dp"
-	    android:background="#000000"/>
-    <ListView
-        android:layout_marginTop="10dp"
-        android:id="@+id/searchList"
+   	<View
+   	    android:layout_marginLeft="5dp"
+   	    android:layout_below="@+id/rel2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" 
+        android:background="#000000"/>
+    <RelativeLayout
+        android:id="@+id/rel3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rel1" >
-    </ListView>
+        android:layout_below="@+id/rel2"
+        android:layout_margin="5dp" >
+
+        <ListView
+            android:id="@+id/searchList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+    </RelativeLayout>
 
 </RelativeLayout>
