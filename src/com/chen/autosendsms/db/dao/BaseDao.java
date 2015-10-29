@@ -34,7 +34,21 @@ public abstract class  BaseDao<T, Integer> {
 			return 0;
 		}  
     }  
-  
+    
+	public void saveList(List<T> list){
+		if(list==null||list.size()==0){
+			return;
+		}
+    	try {
+    		for(T t:list){
+    			getDao().create(t);
+    		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+    
     public List<T> query(PreparedQuery<T> preparedQuery){  
         Dao<T, Integer> dao=null;
         List<T> list=null;

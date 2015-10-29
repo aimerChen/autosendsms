@@ -3,13 +3,14 @@ package com.chen.autosendsms.db.dao;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.chen.autosendsms.db.DatabaseHelper;
 import com.chen.autosendsms.db.entities.Person;
 import com.chen.autosendsms.db.interfaces.PersonService;
 import com.chen.autosendsms.utils.Utils;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import android.content.Context;
 
@@ -48,15 +49,18 @@ public class PersonDao extends BaseDao<Person,Integer> implements PersonService{
 	}
 
 	@Override
-	public List<Person> getPeopleByCondition(Map<String, Object> condition) {
+	public List<Person> searchContactsByName(String name){
 		List<Person> mlist=new ArrayList<Person>();
     	try {
-    		mlist=getDao().queryForFieldValuesArgs(condition);
+            QueryBuilder<Person, Integer> queryBuilder=getDao().queryBuilder();
+	        queryBuilder.where().like("firstName", name);
+	        queryBuilder.where().or().like("lastName", name);
+	        PreparedQuery<Person> preparedQuery = queryBuilder.prepare();  
+    		mlist=getDao().query(preparedQuery);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
     	return mlist;
 	}
-
 }

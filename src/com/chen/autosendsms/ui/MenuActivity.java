@@ -3,7 +3,7 @@ package com.chen.autosendsms.ui;
 import com.chen.autosendsms.R;
 import com.chen.autosendsms.db.DatabaseHelper;
 import com.chen.autosendsms.sendsmsservice.SendSMSService;
-import com.chen.autosendsms.ui.contacts.SearchPersonFragment;
+import com.chen.autosendsms.ui.contacts.ContactsFragment;
 import com.chen.autosendsms.ui.list.ListFragment;
 import com.chen.autosendsms.ui.setting.SettingFragment;
 import com.chen.autosendsms.utils.Utils;
@@ -54,7 +54,7 @@ public class MenuActivity extends Activity implements OnClickListener{
         //mFragments
         mFragments=new Fragment[FRAGMENT_NUMBER];
         mFragments[0]=new ListFragment();
-        mFragments[1]=new SearchPersonFragment();
+        mFragments[1]=new ContactsFragment();
         mFragments[2]=new SettingFragment();
         
         mButtons=new Button[FRAGMENT_NUMBER];

@@ -46,7 +46,10 @@
             android:name="com.chen.autosendsms.ui.setting.NoteActivity"
             android:screenOrientation="portrait" >
         </activity> 
-
+        <activity
+            android:name="com.chen.autosendsms.ui.contacts.ImportContactsActivity"
+            android:screenOrientation="portrait" >
+        </activity> 
         <receiver android:name="com.chen.autosendsms.receiver.BootBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" >

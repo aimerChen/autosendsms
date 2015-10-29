@@ -2,12 +2,15 @@ package com.chen.autosendsms.utils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.TimeZone;
 
 import com.chen.autosendsms.db.dao.TimeDao;
 import com.chen.autosendsms.db.entities.MyTime;
+import com.chen.autosendsms.db.entities.Person;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -23,6 +27,10 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
 
 public class Utils {
 
@@ -230,28 +238,83 @@ public class Utils {
 
 	}
 
-	// /**
-	// * 获取是否发送短信
-	// * @param context
-	// * @param hasSend
-	// */
-	// public static boolean hasSendSMSToday(Context context){
-	// SharedPreferences preference=context.getSharedPreferences("hasSendSMS",
-	// Context.MODE_PRIVATE);
-	// return preference.getBoolean("sent", false);
-	// }
-	//
-	// /**
-	// * 设置是否发送短信
-	// * @param context
-	// * @param hasSend
-	// */
-	// public static void setSendSMSToday(Context context,boolean hasSend){
-	// SharedPreferences preference=context.getSharedPreferences("hasSendSMS",
-	// Context.MODE_PRIVATE);
-	// Editor editor =preference.edit();
-	// editor.putBoolean("sent", hasSend);
-	// editor.commit();
-	// }
+	/**
+	 * 从xls文件中读取联系人
+	 * @param file
+	 * @return
+	 */
+	public static List<Person> readContactsFromFile(File file){
+		String NAME = "name";
+		String BIRTHDAY = "birthday";
+		String PHONENUMBER = "phone";
+		int name_order = 0;
+		int birthday_order = 0;
+		int phonenumber_order = 0;
+		List<Person> list=new ArrayList<Person>();
+		if (file.canRead()) {
+			InputStream is=null;
+			try {
+				is = new FileInputStream(file);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				return null;
+			}
+			Workbook book=null;
+			try {
+				book = Workbook.getWorkbook(is);
+			} catch (BiffException e) {
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+			int num = book.getNumberOfSheets();
+			// 获得第一个工作表对象
+			if (num > 0) {
+				Sheet sheet = book.getSheet(0);
+				int Rows = sheet.getRows();
+				int Cols = sheet.getColumns();
 
+				// 读取第一行，判断哪个一列是名字，那一列是生日，那一列是电话
+				Cell[] cells = sheet.getRow(0);
+				if (cells != null) {
+					for (int i = 0; i < Cols; i++) {
+						if (NAME.equalsIgnoreCase(cells[i].getContents())) {
+							name_order = i;
+						} else if (BIRTHDAY.equalsIgnoreCase(cells[i].getContents())) {
+							birthday_order = i;
+						} else if (PHONENUMBER.equalsIgnoreCase(cells[i].getContents())) {
+							phonenumber_order = i;
+						}
+					}
+				}
+				Person person=null;
+				String name = "";
+				for (int i = 1; i < Rows; i++) {//
+					person = new Person();
+					for (int j = 0; j < Cols; j++) {
+						if (name_order == j) {
+							// name column
+							name = sheet.getRow(i)[j].getContents();
+							person.setLastName(name);
+						} else if (birthday_order == j) {
+							// birthday column
+							person.setBirthday(
+									Utils.getBirthdayTS(sheet.getRow(i)[j].getContents().replace(".", "-")));
+						} else if (phonenumber_order == j) {
+							// phone number column
+							person.setPhoneNumber(sheet.getRow(i)[j].getContents());
+						}
+					}
+					list.add(person);
+				}
+			}
+			book.close();
+		} else {
+			Log.e("MainFragment", "can not read");
+		}
+		return list;
+	}
+	
 }

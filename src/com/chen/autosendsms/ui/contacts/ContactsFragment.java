@@ -1,9 +1,7 @@
 package com.chen.autosendsms.ui.contacts;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.chen.autosendsms.R;
 import com.chen.autosendsms.db.dao.PersonDao;
@@ -25,60 +23,112 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class SearchPersonFragment extends Fragment{
+public class ContactsFragment extends Fragment implements OnClickListener{
 	
-	private PersonDao mPersonDao=null;
 	private EditText mEditTextSearch;
+	private ImageButton btn_addPerson;
 	private TextView txt_contactsNumber;
 	private ListView mListView;
 	private List<Person> mList;
 	private MySearchAdapter mAdapter;
 	private List<Person> list;
+	
+	private LinearLayout mLinearAddMenu;
 
+	private PersonDao mPersonDao=null;
 	private AlertDialog dialog=null;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		ViewGroup view=(ViewGroup) inflater.inflate(R.layout.activity_searchperson, container,false);
+		ViewGroup view=(ViewGroup) inflater.inflate(R.layout.activity_contacts, container,false);
 		initial(view);
 		return view;
 	}
+
+	private void initial(ViewGroup view){
+		mPersonDao=new PersonDao(getActivity());
+		
+		btn_addPerson=(ImageButton)view.findViewById(R.id.addPerson);
+		btn_addPerson.setOnClickListener(this);
+		mLinearAddMenu=(LinearLayout)view.findViewById(R.id.rel_add_menu);
+		mLinearAddMenu.setVisibility(View.GONE);
+		
+		mEditTextSearch=(EditText)view.findViewById(R.id.search);
+		mEditTextSearch.addTextChangedListener(mTextWatcher); 
+		txt_contactsNumber=(TextView)view.findViewById(R.id.contactsNumber);
+		txt_contactsNumber.setText("0");
+		mListView=(ListView)view.findViewById(R.id.searchList);
+		
+		
+		mList=new ArrayList<Person>();
+		list=new ArrayList<Person>();
+		mAdapter=new MySearchAdapter(mList);
+		mListView.setAdapter(mAdapter);
+	}
 	
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()){
+		case R.id.addPerson:
+			toggleMenu();
+			break;
+			
+		case R.id.add_person:
+			Intent intent=new Intent();
+			intent.setClass(getActivity(), AddPersonActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.importFile:
+			Intent intent1=new Intent();
+			intent1.setClass(getActivity(), ImportContactsActivity.class);
+			startActivity(intent1);
+			break;
+		}
+		
+	}
 	
+	/**
+	 * 显示和隐藏添加联系人菜单
+	 */
+	private void toggleMenu(){
+		if(mLinearAddMenu.getVisibility()==View.GONE){
+			mLinearAddMenu.setVisibility(View.VISIBLE);
+		}else{
+			mLinearAddMenu.setVisibility(View.GONE);
+		}
+	}
+    
+	
+	/**
+	 * 每次刷新列表
+	 */
 	@Override
 	public void onResume(){
 		super.onResume();
-        getDataFromDatabase();
+		//从数据库读取联系人，并赋值给mList
+		getDataFromDatabase();
         setContactNumberText();
         mAdapter.notifyDataSetChanged();
 	}
 	
+	/**
+	 * 切换时关闭键盘
+	 */
 	@Override
 	public void onStop() {
 		super.onStop();
 		Utils.hiddenKeyBoard(getActivity(), mEditTextSearch);
 	}
 
-	private void initial(ViewGroup view){
-		mPersonDao=new PersonDao(getActivity());
-		mEditTextSearch=(EditText)view.findViewById(R.id.search);
-		mEditTextSearch.addTextChangedListener(mTextWatcher); 
-		txt_contactsNumber=(TextView)view.findViewById(R.id.contactsNumber);
-		txt_contactsNumber.setText("0");
-		mListView=(ListView)view.findViewById(R.id.searchList);
-		mList=new ArrayList<Person>();
-		list=new ArrayList<Person>();
-		getDataFromDatabase();
-		mAdapter=new MySearchAdapter();
-		mListView.setAdapter(mAdapter);
-		
-
-		setContactNumberText();
-	}
-	
+    
+	/**
+	 * 从数据库获取出所有联系人
+	 */
     private void getDataFromDatabase(){
     	if(mPersonDao==null){
     		return ;
@@ -86,19 +136,19 @@ public class SearchPersonFragment extends Fragment{
     	mList=mPersonDao.queryAll();
     }
     
+	/**
+	 * 显示共有多少联系人
+	 */
     private void setContactNumberText(){
     	if(mList!=null&&mList.size()>0){
         	txt_contactsNumber.setText(""+mList.size());
     	}
     }
-    
-    private void refreshListView(){
-        mList.clear();
-        mList.addAll(list);
-        mAdapter.notifyDataSetChanged();
-    }
   
-
+    /**
+     * 长按删除联系人
+     * @param position
+     */
 	private void deleteAlert(final int position){
 		if(mList.get(position)!=null){
 			AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
@@ -127,6 +177,10 @@ public class SearchPersonFragment extends Fragment{
 		}
 	}
     
+	
+	/**
+	 * 搜索框
+	 */
     private TextWatcher mTextWatcher = new TextWatcher() {  
         private CharSequence temp;
         @Override  
@@ -144,17 +198,16 @@ public class SearchPersonFragment extends Fragment{
         public void afterTextChanged(Editable s) {  
             // TODO Auto-generated method stub
         	if(temp==null||temp.length()==0){
-        		list=mPersonDao.queryAll();
-        		refreshListView();
+        		//不搜索，则回到初始状态
+        		mAdapter.setList(mList);
         		return;
         	}
-        	Map<String,Object> condition=new HashMap<String,Object>();
-        	condition.put("firstName", temp.toString());
-        	condition.put("lastName", temp.toString());
-    		list=mPersonDao.getPeopleByCondition(condition);
+        	list=mPersonDao.searchContactsByName(temp.toString());
+        	if(list!=null){
+        		mAdapter.setList(list);
+        	}
         }  
     };  
-	
 	  
     /**
      * ListView adapter
@@ -163,17 +216,32 @@ public class SearchPersonFragment extends Fragment{
      */
     private class MySearchAdapter extends BaseAdapter{
 
+    	private List<Person> myList;
     	private Person mPerson=null;
+    	
+    	public MySearchAdapter(List<Person> list){
+    		myList=list;
+    	}
+    	
+    	/**
+    	 * 切换数据源
+    	 * @param list
+    	 */
+    	public void setList(List<Person> list){
+    		myList=list;
+    		this.notifyDataSetChanged();
+    	}
+    	
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return mList==null?0:mList.size();
+			return myList==null?0:myList.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
-			return mList==null?null:mList.get(position);
+			return myList==null?null:myList.get(position);
 		}
 
 		@Override
@@ -187,7 +255,7 @@ public class SearchPersonFragment extends Fragment{
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			ViewHolder holder=null;
-			mPerson=mList.get(position);
+			mPerson=myList.get(position);
 			if(convertView==null){
 				holder=new ViewHolder();
 				convertView=LayoutInflater.from(getActivity()).inflate(R.layout.list_searchitem, null, false);
@@ -234,6 +302,6 @@ public class SearchPersonFragment extends Fragment{
     	private TextView tv_birthday;
     	private TextView tv_department;
     }
-    
-    
+
+
 }

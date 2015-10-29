@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 /**
  * 在Android平台上，如果你想在多线程环境下安全的使用数据库的话，那么你得确保所有的线程使用的都是同一个数据库连接。
- * 
+ * 这个主要用来管理数据库链接的开关
  * @author Administrator
  *
  */
