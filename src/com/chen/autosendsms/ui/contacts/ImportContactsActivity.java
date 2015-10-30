@@ -3,7 +3,10 @@ package com.chen.autosendsms.ui.contacts;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import com.chen.autosendsms.R;
 import com.chen.autosendsms.db.dao.PersonDao;
@@ -26,6 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -48,10 +52,16 @@ public class ImportContactsActivity extends Activity {
 	private Runnable mRunnable = null;
 	private File mCurrentFile = null;
 
+//	private char[] l = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+//			'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', };
+	private String mComparedString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	
+	private String UNKNOWN_FILE="UNKNOWN";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_addperson);
+		setContentView(R.layout.activity_import_contacts);
 
 		initial();
 
@@ -63,8 +73,9 @@ public class ImportContactsActivity extends Activity {
 		mListView = (ListView) findViewById(R.id.filelist);
 		mList = new ArrayList<File>();
 		showExternalStorageFiles();
-		mAdapter = new MyFileAdapter(mList);
+		mAdapter = new MyFileAdapter();
 		mListView.setAdapter(mAdapter);
+		mAdapter.setList(mList);
 	}
 
 	/**
@@ -76,21 +87,35 @@ public class ImportContactsActivity extends Activity {
 			try {
 				File SDFile = Environment.getExternalStorageDirectory();
 				File sdPath = new File(SDFile.getAbsolutePath());
-				mCurrentFile=sdPath;//当前文件夹
-				if (sdPath.isDirectory()) {
-					if (sdPath.listFiles().length > 0) {
-						for (File file : sdPath.listFiles()) {
-							mList.add(file);
-						}
-					}
-				} else {
-					mList.add(sdPath);
-				}
+				changeDir(sdPath);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;
 			}
 		}
+	}
+
+	/**
+	 * 按顺序排列
+	 * 
+	 * @param fList
+	 */
+	private void sortList(List<File> fList) {
+		
+		// 按顺序排列
+		Collections.sort(fList, new Comparator<File>() {
+
+			@Override
+			public int compare(File lhs, File rhs) {
+				String str1 = lhs.getName().toUpperCase(Locale.getDefault());
+				String str2 = rhs.getName().toUpperCase(Locale.getDefault());
+				if (str1.toCharArray()[0] > str2.toCharArray()[0]) {
+					return 1;
+				} else {
+					return -1;
+				}
+			}
+		});
 	}
 
 	/**
@@ -102,21 +127,16 @@ public class ImportContactsActivity extends Activity {
 	private class MyFileAdapter extends BaseAdapter {
 
 		private List<File> myList;
-		private File mFile = null;
-
-		public MyFileAdapter(List<File> list) {
-			myList = list;
-		}
 
 		/**
 		 * 切换数据源
 		 * 
 		 * @param list
 		 */
-		// public void setList(List<File> list){
-		// myList=list;
-		// this.notifyDataSetChanged();
-		// }
+		 public void setList(List<File> list){
+			 myList=list;
+			 this.notifyDataSetChanged();
+		 }
 
 		@Override
 		public int getCount() {
@@ -141,7 +161,8 @@ public class ImportContactsActivity extends Activity {
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			ViewHolder holder = null;
-			mFile = myList.get(position);
+
+			final File mFile = myList.get(position);
 			if (convertView == null) {
 				holder = new ViewHolder();
 				convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.list_fileitem, null, false);
@@ -150,7 +171,20 @@ public class ImportContactsActivity extends Activity {
 				holder = (ViewHolder) convertView.getTag();
 			}
 			holder.tv_name = (TextView) convertView.findViewById(R.id.name);
-
+			holder.img_logo = (ImageView) convertView.findViewById(R.id.logo);
+			if (mFile.isDirectory()) {
+				holder.img_logo.setImageResource(R.drawable.folder);
+			} else {
+				String exName=getExtensionName(mFile);
+				if(exName.equalsIgnoreCase("xls")){
+					holder.img_logo.setImageResource(R.drawable.xls);
+				}else if(exName.equalsIgnoreCase(UNKNOWN_FILE)){
+					//unkown
+					holder.img_logo.setImageResource(R.drawable.txt_file);
+				}else{
+					holder.img_logo.setImageResource(R.drawable.txt_file);
+				}
+			}
 			holder.tv_name.setText(mFile.getName());
 			convertView.setOnClickListener(new OnClickListener() {
 
@@ -166,6 +200,8 @@ public class ImportContactsActivity extends Activity {
 
 	private static class ViewHolder {
 		private TextView tv_name;
+		private ImageView img_logo;
+
 	}
 
 	/**
@@ -174,47 +210,75 @@ public class ImportContactsActivity extends Activity {
 	 * @param dirPath
 	 */
 	private void changeDir(final File dirPath) {
+		if (dirPath == null) {
+			return;
+		}
 		if (dirPath.isDirectory()) {
-			mCurrentFile=dirPath;
+			mCurrentFile = dirPath;
 			mList.clear();
-			File sdPath = new File(dirPath.getAbsolutePath());
-			if (sdPath.isDirectory()) {
-				if (sdPath.listFiles().length > 0) {
-					for (File file : sdPath.listFiles()) {
+			File[] files = dirPath.listFiles();
+			if (files.length > 0) {
+				for (File file : files) {
+					if (mComparedString.contains(file.getName().substring(0, 1))) {
 						mList.add(file);
 					}
 				}
-			} else {
-				mList.add(sdPath);
 			}
-			mAdapter.notifyDataSetChanged();
+			sortList(mList);
+			mAdapter.setList(mList);
 		} else {
-			// 是文件
-			AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-			builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			String[] token = dirPath.getName().split(".");
+			if (token.length >= 2 && token[1].equalsIgnoreCase("xls")) {
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					String[] token = dirPath.getName().split(".");
-					if (token.length >= 2 && token[1].equalsIgnoreCase("xls")) {
-						Toast.makeText(getApplicationContext(), "开始导入", Toast.LENGTH_SHORT).show();
+				// 是xls文件
+				AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+				builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						toast("开始导入");
 						importPeople(dirPath);
-					} else {
-						Toast.makeText(getApplicationContext(), "文件格式不对，不能导入", Toast.LENGTH_SHORT).show();
+						dialog.dismiss();
 					}
-					dialog.dismiss();
-				}
-			}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+				}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
-			builder.create().show();
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				builder.create().show();
+			} else {
+				toast("文件格式不对，不能导入");
+			}
 		}
 	}
+	
+	private void toast(String message){
+		Toast.makeText(getApplicationContext(), ""+message, Toast.LENGTH_SHORT).show();
+	}
 
+	/**
+	 * 获取文件的扩展名
+	 * @param file
+	 * @return
+	 */
+	private String getExtensionName(File file){
+		if(file==null){
+			return "";
+		}
+		String[] name=file.getName().split(".");
+		if(name.length>=2){
+			return name[name.length-1];
+		}else{
+			return UNKNOWN_FILE;
+		}
+	}
+	
+	/**
+	 * 将联系人读出
+	 * @param file
+	 */
 	private void importPeople(final File file) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
 		final AlertDialog dialog = builder.setView(new ProgressBar(getApplicationContext())).setCancelable(false)
@@ -231,6 +295,10 @@ public class ImportContactsActivity extends Activity {
 
 	}
 
+	/**
+	 * 将联系人写入数据库
+	 * @param list
+	 */
 	private void saveContacts(List<Person> list) {
 		if (mPersonDao != null) {
 			mPersonDao.saveList(list);
@@ -281,12 +349,13 @@ public class ImportContactsActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-			if(mCurrentFile!=null){
-				File file=mCurrentFile.getParentFile();
-				if(!file.getAbsolutePath().equals(Environment.getExternalStorageDirectory().getAbsolutePath())){
-					changeDir(file);
-					return false;
+			if (mCurrentFile != null) {
+				File file = mCurrentFile.getParentFile();
+				if (mCurrentFile.getAbsolutePath()
+						.equals(Environment.getExternalStorageDirectory().getAbsolutePath())) {
+					return super.onKeyDown(keyCode, event);
 				}
+				changeDir(file);
 			}
 			return true;
 		} else {

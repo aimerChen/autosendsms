@@ -3,6 +3,7 @@ package com.chen.autosendsms.ui.contacts;
 import java.util.Calendar;
 
 import com.chen.autosendsms.R;
+import com.chen.autosendsms.db.dao.BaseDao;
 import com.chen.autosendsms.db.dao.PersonDao;
 import com.chen.autosendsms.db.entities.Person;
 import com.chen.autosendsms.utils.Utils;
@@ -23,14 +24,18 @@ import kankan.wheel.widget.adapters.NumericWheelAdapter;
  * @author chen
  *
  */
-public class EditPersonActivity extends Activity{
+public class AddAndEditContactActivity extends Activity{
    
 //	private Button bt_cancel;
 	private Button bt_ok;
+
+//	private ImageButton bt_cancel;
+//	private ImageButton bt_ok;
 	
 	private EditText edt_lastName;
 	private EditText edt_firstName;
 	private EditText edt_phonenumber;
+	
 	private WheelView mViewYear;
 	private WheelView mViewMonth;
 	private WheelView mViewDay;
@@ -38,75 +43,75 @@ public class EditPersonActivity extends Activity{
 	private int MIN_MONTH=1;
 	private int MIN_YEAR=1950;
 	private int MAX_YEAR=2015;
-	private int DEFAULT_YEAR=1988;
 	private NumericWheelAdapter m29DayAdapter;
 	private NumericWheelAdapter m30DayAdapter;
 	private NumericWheelAdapter m31DayAdapter;
 	
-//	private DaoFactory mDaoFactory=null;
-	private PersonDao mPersonDao=null;
+	//	private ServiceFactory mServiceFactory=null;
+	private BaseDao<Person,Integer> mPersonDao=null;
 	private Person mPerson=null;
+	private boolean mIsEditMode=false;
+	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editperson);
-        try{
-        	mPerson=(Person)getIntent().getSerializableExtra("person");
-        }catch(Exception e){
-        	e.printStackTrace();
-        	finish();
-        }
+        setContentView(R.layout.activity_addcontact);
         inital();
-    	setValue();
+        mIsEditMode=isEditMode();
+        if(mIsEditMode){
+        	setValue();
+        }
     }
     
+	/**
+	 * 是否是编辑模式
+	 * @return
+	 */
+	private boolean isEditMode(){
+		mPerson=(Person)getIntent().getSerializableExtra("person");
+        return mPerson!=null;
+	}
+	
+	/**
+	 * 初始化控件
+	 */
     private void inital(){
-//    	mDaoFactory=DaoFactory.getDaoFactory(getApplicationContext());
-//    	mPersonDao=mDaoFactory.getPersonDao();
+//    	mServiceFactory=ServiceFactory.getServiceFactory(getApplicationContext());
+//    	mPersonService=mServiceFactory.getPersonService();
     	mPersonDao=new PersonDao(getApplicationContext());
-//    	bt_cancel=(Button)findViewById(R.id.cancel);
+    	
     	bt_ok=(Button)findViewById(R.id.ok);
     	
     	edt_lastName=(EditText)findViewById(R.id.lastname);
     	edt_firstName=(EditText)findViewById(R.id.firstname);
     	edt_phonenumber=(EditText)findViewById(R.id.phonenumber);
+    	
     	mViewYear=(WheelView)findViewById(R.id.year);
     	mViewMonth=(WheelView)findViewById(R.id.month);
     	mViewDay=(WheelView)findViewById(R.id.day);
     	
     	mViewYear.setViewAdapter(new NumericWheelAdapter(this, MIN_YEAR, MAX_YEAR));
-//    	mViewDay.setVisibleItems(8);
-//		int curYear = Calendar.getInstance().get(Calendar.YEAR);
-		mViewYear.setCurrentItem(DEFAULT_YEAR-MIN_YEAR);
+		mViewYear.setCurrentItem(1988-MIN_YEAR);
     	
 		mViewMonth.setViewAdapter(new NumericWheelAdapter(this, MIN_MONTH, 12));
+		int curMonth = Calendar.getInstance().get(Calendar.MONTH);
+		mViewMonth.setCurrentItem(curMonth);//item的序号从0开始，月份也是从0开始，不需要改变
         OnWheelChangedListener listener = new OnWheelChangedListener() {
             public void onChanged(WheelView wheel, int oldValue, int newValue) {
             	changeDayViewAdapter(newValue);
             }
         };
 		mViewMonth.addChangingListener(listener);
-//    	mViewDay.setVisibleItems(8);
-		int curMonth = Calendar.getInstance().get(Calendar.MONTH);
-		mViewMonth.setCurrentItem(curMonth);//item的序号从0开始，月份也是从0开始，不需要改变
-
 		
+		//day adapter
 		m29DayAdapter=new NumericWheelAdapter(this, MIN_DAY, 29);
 		m30DayAdapter=new NumericWheelAdapter(this, MIN_DAY, 30);
 		m31DayAdapter=new NumericWheelAdapter(this, MIN_DAY, 31);
-		
 		changeDayViewAdapter(curMonth);
+		
 		int curDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     	mViewDay.setCurrentItem(curDay-MIN_DAY);//item的序号从0开始，需要-1
     	
-//    	bt_cancel.setOnClickListener(new OnClickListener(){
-//
-//			@Override
-//			public void onClick(View v) {
-//				finish();
-//			}
-//    		
-//    	});
     	bt_ok.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -115,9 +120,11 @@ public class EditPersonActivity extends Activity{
 			}
     		
     	});
-    	
     }
     
+    /**
+     * 给控件赋值
+     */
     private void setValue(){
     	if(mPerson!=null){
         	edt_lastName.setText(mPerson.getLastName());
@@ -125,17 +132,19 @@ public class EditPersonActivity extends Activity{
         	edt_phonenumber.setText(mPerson.getPhoneNumber());
         	int[] birthdayArray=Utils.getBirthdayArray(mPerson.getBirthday());
         	mViewYear.setCurrentItem(birthdayArray[0]-MIN_YEAR);
-        	mViewMonth.setCurrentItem(birthdayArray[1]-MIN_MONTH);
+        	mViewMonth.setCurrentItem(birthdayArray[1]);
         	mViewDay.setCurrentItem(birthdayArray[2]-MIN_DAY);
     	}
     }
+    
     
     private void savePerson(){
     	String lastName=edt_lastName.getText().toString().trim();
 		String firstName=edt_firstName.getText().toString().trim();
 		String phoneNumber=edt_phonenumber.getText().toString().trim();
-		if(lastName==null||lastName.length()==0||phoneNumber==null||phoneNumber.length()==0){
-			Toast.makeText(getApplicationContext(), "信息不完整", Toast.LENGTH_SHORT).show();
+		if(lastName==null||lastName.length()==0
+				||phoneNumber==null||phoneNumber.length()<11){
+			toast("信息不完整");
 			return;
 		}
 		if(firstName==null){
@@ -145,27 +154,36 @@ public class EditPersonActivity extends Activity{
 		if(mPersonDao!=null){
 			long resultTs=Utils.stringToLong(createBirthdayString());
 			if(resultTs==0){
-				Toast.makeText(getApplicationContext(), "添加失败", Toast.LENGTH_SHORT).show();
+				toast("添加失败");
 				return;
 			}else{
-				mPerson.setBirthday(resultTs);
-				mPerson.setFirstName(firstName);
-				mPerson.setLastName(lastName);
-				mPerson.setPhoneNumber(phoneNumber);
-				int re=mPersonDao.update(mPerson);
-				if(re>0){
-					Toast.makeText(getApplicationContext(), "添加成功", Toast.LENGTH_SHORT).show();
-					Utils.hiddenKeyBoard(getApplicationContext(), edt_phonenumber);
-					finish();
+				Person person=null;
+				if(mIsEditMode){
+					person=mPerson;
 				}else{
-					Toast.makeText(getApplicationContext(), "修改保存失败", Toast.LENGTH_SHORT).show();
+					person=new Person();
 				}
+				person.setBirthday(resultTs);
+				person.setFirstName(firstName);
+				person.setLastName(lastName);
+				person.setPhoneNumber(phoneNumber);
+				if(mIsEditMode){
+					mPersonDao.update(person);
+				}else{
+					mPersonDao.save(person);
+				}
+				toast("添加成功");
+				Utils.hiddenKeyBoard(getApplicationContext(), edt_phonenumber);
+				finish();
 			}
 		}else{
-			Toast.makeText(getApplicationContext(), "添加失败", Toast.LENGTH_SHORT).show();
+			toast("添加失败");
 		}
     }
-    
+
+    private void toast(String message){
+		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
     
     /**
      * 创建日期格式字符串，以便存入数据库

@@ -53,8 +53,7 @@ public class PersonDao extends BaseDao<Person,Integer> implements PersonService{
 		List<Person> mlist=new ArrayList<Person>();
     	try {
             QueryBuilder<Person, Integer> queryBuilder=getDao().queryBuilder();
-	        queryBuilder.where().like("firstName", name);
-	        queryBuilder.where().or().like("lastName", name);
+	        queryBuilder.where().like("firstName", name).or().like("lastName", name);
 	        PreparedQuery<Person> preparedQuery = queryBuilder.prepare();  
     		mlist=getDao().query(preparedQuery);
 		} catch (SQLException e) {

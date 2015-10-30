@@ -6,7 +6,7 @@ import java.util.List;
 import com.chen.autosendsms.R;
 import com.chen.autosendsms.db.dao.PersonDao;
 import com.chen.autosendsms.db.entities.Person;
-import com.chen.autosendsms.ui.contacts.EditPersonActivity;
+import com.chen.autosendsms.ui.contacts.AddAndEditContactActivity;
 import com.chen.autosendsms.utils.Utils;
 
 import android.annotation.SuppressLint;
@@ -162,7 +162,7 @@ public class ListFragment extends Fragment {
 				@Override
 				public void onClick(View v) {
 					Intent intent=new Intent();
-					intent.setClass(getActivity(), EditPersonActivity.class);
+					intent.setClass(getActivity(), AddAndEditContactActivity.class);
 					intent.putExtra("person", mPerson);
 					startActivity(intent);
 				}

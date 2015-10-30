@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="添加联系人"
+            android:text="编辑联系人"
             android:textColor="#000000"
             android:textSize="20sp" />
         <Button
@@ -68,6 +68,7 @@
                 android:background="@drawable/bg_edittext"
                 android:inputType="textPersonName"
                 android:paddingLeft="5dp"
+                android:imeOptions="actionNext"
                 android:textSize="14sp" >
 
                 <requestFocus />
@@ -99,6 +100,7 @@
                 android:background="@drawable/bg_edittext"
                 android:inputType="textPersonName"
                 android:paddingLeft="5dp"
+                android:imeOptions="actionNext"
                 android:textSize="14sp" >
             </EditText>
         </RelativeLayout>
@@ -127,6 +129,7 @@
                 android:layout_toRightOf="@+id/textView3"
                 android:background="@drawable/bg_edittext"
                 android:inputType="phone"
+                android:imeOptions="actionDone"
                 android:paddingLeft="5dp"
                 android:textSize="14sp" />
         </RelativeLayout>

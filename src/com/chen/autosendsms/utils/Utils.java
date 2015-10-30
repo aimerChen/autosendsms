@@ -169,7 +169,7 @@ public class Utils {
 		Calendar cal=Calendar.getInstance();
 		cal.setTimeInMillis(ts*1000);
 		result[0]=cal.get(Calendar.YEAR);
-		result[1]=cal.get(Calendar.MONTH+1);
+		result[1]=cal.get(Calendar.MONTH);
 		result[2]=cal.get(Calendar.DAY_OF_MONTH);
 		return result;
 	}
