@@ -1,52 +1,123 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="vertical" >
-
+    android:background="#ffffff" >
     <RelativeLayout
-        android:id="@+id/titlebar"
+        android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#ffffe0" >
-
-       <!--  <Button
-            android:id="@+id/importPeople"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="#eedd82"
-            android:text="导入" />
-       
-             <Button
-            android:id="@+id/changeMessage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:text="内容"
-            android:background="#eedd82"/>
-        -->
-
-        <TextView
+        android:layout_height="@dimen/avtivity_title_height"
+        android:background="@color/titlebar_backgournd" >
+		<TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="生日列表"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-
-        
+            android:text="@string/fragment_contacts_list_title"
+            android:textStyle="bold"
+            android:textColor="@color/titlebar_text_color"
+            android:textSize="@dimen/avtivity_title_text_size" />
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/personlist"
+    <RelativeLayout
+        android:id="@+id/rel2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:layout_height="@dimen/fragment_rel2_height"
+        android:layout_below="@+id/title"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp" >
 
-</LinearLayout>
+    <com.chen.autosendsms.ui.contacts.sort.ClearEditText
+        android:id="@+id/filter_edit"
+        android:layout_marginTop="5dip"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fragment_filter_edit_height"
+        android:drawableStart="@drawable/search_bar_icon_normal"
+        android:drawableEnd="@drawable/cancelbtn"
+        android:hint="@string/fragment_contacts_search_hint"
+        android:singleLine="true"
+        android:background="@drawable/bg_edittext"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:textSize="15.0dip" />
+
+        <RelativeLayout
+            android:id="@+id/rel2_top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fragment_rel2_top_height"
+            android:layout_below="@+id/filter_edit" >
+
+            <TextView
+                android:id="@+id/des_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/contactsNumber"
+                android:gravity="center"
+                android:text="@string/fragment_contacts_text_all"
+                android:textColor="@color/fragment_contacts_des"
+                android:textSize="@dimen/fragment_rel2_top_text_size" />
+
+            <TextView
+                android:id="@+id/contactsNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/des_contact2"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/fragment_contacts_des"
+                android:textSize="@dimen/fragment_rel2_top_text_size" />
+
+            <TextView
+                android:id="@+id/des_contact2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:text="个联系人"
+                android:textColor="@color/fragment_contacts_des"
+                android:textSize="@dimen/fragment_rel2_top_text_size" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/rel2"
+        android:layout_marginLeft="5dp"
+        android:background="@color/cut_off_rule_color" />
+
+    <FrameLayout
+        android:id="@+id/rel3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rel2"
+        android:layout_margin="5dp" >
+
+        <ListView
+            android:dividerHeight="0dp"
+            android:scrollbars="none"
+            android:id="@+id/searchList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+        
+        <TextView
+            android:id="@+id/dialog"
+            android:layout_width="80.0dip"
+            android:layout_height="80.0dip"
+            android:layout_gravity="center"
+            android:background="@drawable/show_head_toast_bg"
+            android:gravity="center"
+            android:textColor="#ffffffff"
+            android:textSize="30.0dip"
+            android:visibility="invisible" />
+
+        <com.chen.autosendsms.ui.contacts.sort.SideBar
+            android:id="@+id/sidrbar"
+            android:layout_width="30.0dip"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right|center" />
+    </FrameLayout>
+</RelativeLayout>

@@ -13,7 +13,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -91,9 +90,9 @@ public class MenuActivity extends Activity implements OnClickListener{
     
 	private void changeFramgent(){
 		for(int i=0;i<FRAGMENT_NUMBER;i++){
-			mButtons[i].setBackgroundColor(Color.parseColor("#ffffe0"));
+			mButtons[i].setTextColor(getResources().getColor(R.color.bottombar_button_text_color)); 
 			if(i==mCurrentFragment){
-				mButtons[i].setBackgroundColor(Color.parseColor("#eedd82"));
+				mButtons[i].setTextColor(getResources().getColor(R.color.bottombar_button_text_color_selected));
 			}
 		}
 		

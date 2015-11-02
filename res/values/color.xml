@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- bar background -->
+    <color name="titlebar_backgournd">#000000</color>
+    <color name="titlebar_text_color">#ffffff</color>
+    
+    <!-- MenuActivity bottom bar -->
+    <color name="menu_bar_button_background">#F5F5F5</color>
+    <color name="bottombar_button_text_color">#C0C0C0</color>
+    <color name="bottombar_backgournd">#ffffff</color>
+    <color name="bottombar_button_text_color_selected">#32CD32</color>
+    
+    <!-- cut-off rule -->
+    <color name="cut_off_rule_color">#DCDCDC</color>
+    
+    <!-- fragment contacts -->
+    <color name="fragment_contacts_des">#696969</color>
+    
+    <!-- normal color -->
+    <color name="black">#000000</color>
+    
+</resources>

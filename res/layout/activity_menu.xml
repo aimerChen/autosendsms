@@ -7,44 +7,45 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottombar"
-        android:layout_below="@+id/titlebar" >
+        android:layout_height="match_parent" 
+        android:layout_above="@+id/bottombar">
     </FrameLayout>
 
     <LinearLayout
         android:id="@+id/bottombar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/avtivity_bottom_bar_height"
         android:layout_alignParentBottom="true"
-        android:background="#1E90FF"
         android:orientation="horizontal" >
 
         <Button
+            android:textColor="@color/bottombar_button_text_color"
             android:id="@+id/listfragment"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#eedd82"
-            android:textSize="12sp"
-            android:text="列表" />
+            android:background="@color/menu_bar_button_background"
+            android:textSize="@dimen/fragment_bottom_bar_text_size"
+            android:text="@string/activity_menu_bar_list" />
 
         <Button
+            android:textColor="@color/bottombar_button_text_color"
             android:id="@+id/searchfragment"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="12sp"
-            android:background="#ffffe0"
-            android:text="联系人" />
+            android:textSize="@dimen/fragment_bottom_bar_text_size"
+            android:background="@color/menu_bar_button_background"
+            android:text="@string/activity_menu_bar_contacts"/>
 		<Button
+            android:textColor="@color/bottombar_button_text_color"
             android:id="@+id/settingfragment"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="12sp"
-            android:background="#ffffe0"
-            android:text="设置" />
+            android:textSize="@dimen/fragment_bottom_bar_text_size"
+            android:background="@color/menu_bar_button_background"
+            android:text="@string/activity_menu_bar_setting" />
         <!-- <Button
             android:id="@+id/notefragment"
             android:layout_width="50dp"

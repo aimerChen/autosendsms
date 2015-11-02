@@ -7,31 +7,26 @@
     <RelativeLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#ffffe0" >
-
-        <!-- <Button
-            android:id="@+id/cancel"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="#eedd82"
-            android:text="返回" /> -->
+        android:layout_height="@dimen/avtivity_title_height"
+        android:background="@color/titlebar_backgournd" >
 		<TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="添加联系人"
-            android:textColor="#000000"
-            android:textSize="20sp" />
+            android:text="@string/fragment_add_contact_title"
+            android:textStyle="bold"
+            android:textColor="@color/titlebar_text_color"
+            android:textSize="@dimen/avtivity_title_text_size" />
         <Button
             android:id="@+id/ok"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:background="#eedd82"
+            android:layout_width="@dimen/avtivity_title_button_width"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:background="@color/titlebar_backgournd"
             android:gravity="center"
-            android:text="保存" />
+            android:textColor="@color/titlebar_text_color"
+            android:text="@string/fragment_add_contact_button" />
     </RelativeLayout>
 
     <LinearLayout
@@ -43,33 +38,33 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_height="@dimen/fragment_add_contact_rel_height"
+            android:layout_marginTop="@dimen/fragment_add_contact_rel_margin_top"
             android:background="#ffffff" >
 
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="50dp"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/fragment_add_contact_rel_height"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:gravity="center"
-                android:text="姓:"
+                android:text="@string/fragment_add_contact_text_lasttname"
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="@dimen/fragment_add_contact_rel_text_size" />
 
             <EditText
                 android:id="@+id/lastname"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="3dp"
-                android:layout_toRightOf="@+id/textView1"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@+id/textView1"
                 android:background="@drawable/bg_edittext"
                 android:inputType="textPersonName"
                 android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:imeOptions="actionNext"
-                android:textSize="14sp" >
+                android:textSize="@dimen/fragment_add_contact_rel_text_size" >
 
                 <requestFocus />
             </EditText>
@@ -77,89 +72,90 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/fragment_add_contact_rel_height"
             android:layout_marginTop="10dp"
             android:background="#ffffff" >
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="50dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="15dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
                 android:gravity="center"
-                android:text="名字:"
+                android:text="@string/fragment_add_contact_text_firsttname"
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="@dimen/fragment_add_contact_rel_text_size" />
 
             <EditText
                 android:id="@+id/firstname"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginRight="10dp"
-                android:layout_toRightOf="@+id/textView2"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@+id/textView2"
                 android:background="@drawable/bg_edittext"
                 android:inputType="textPersonName"
                 android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:imeOptions="actionNext"
-                android:textSize="14sp" >
+                android:textSize="@dimen/fragment_add_contact_rel_text_size" >
             </EditText>
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/fragment_add_contact_rel_height"
             android:layout_marginTop="10dp"
             android:background="#ffffff" >
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="50dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="15dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
                 android:gravity="center"
-                android:text="电话:"
+                android:text="@string/fragment_add_contact_text_phone"
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="@dimen/fragment_add_contact_rel_text_size" />
 
             <EditText
                 android:id="@+id/phonenumber"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginRight="10dp"
-                android:layout_toRightOf="@+id/textView3"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@+id/textView3"
                 android:background="@drawable/bg_edittext"
                 android:inputType="number"
                 android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:maxLength="11"
                 android:imeOptions="actionDone"
-                android:textSize="14sp" />
+                android:textSize="@dimen/fragment_add_contact_rel_text_size" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="@dimen/fragment_add_contact_rel_wheel"
             android:layout_marginTop="10dp"
             android:background="#ffffff" >
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
                 android:gravity="center"
                 android:layout_alignParentTop="true"
-                android:text="生日:"
+                android:text="@string/fragment_add_contact_text_birthday"
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="@dimen/fragment_add_contact_rel_text_size" />
 
             <LinearLayout
                 android:id="@+id/birthday_lin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
-                android:layout_toRightOf="@+id/textView4"
-                android:orientation="horizontal"
-                android:paddingLeft="5dp" >
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@+id/textView4"
+                android:orientation="horizontal">
 
                 <kankan.wheel.widget.WheelView
                     android:id="@+id/year"

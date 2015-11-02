@@ -8,39 +8,18 @@
     <RelativeLayout
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#ffffe0" >
+        android:layout_height="@dimen/avtivity_title_height"
+        android:background="@color/titlebar_backgournd" >
 
-        <!--
-             <Button
-            android:id="@+id/importPeople"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="#eedd82"
-            android:text="导入" />
-       
-             <Button
-            android:id="@+id/changeMessage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:text="内容"
-            android:background="#eedd82"/>
-
-        -->
-
-        <TextView
+		<TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="导入联系人"
-            android:textColor="#000000"
-            android:textSize="20sp" />
+            android:text="@string/activity_imiport_contacts_title"
+            android:textStyle="bold"
+            android:textColor="@color/titlebar_text_color"
+            android:textSize="@dimen/avtivity_title_text_size" />
     </RelativeLayout>
 
     <RelativeLayout

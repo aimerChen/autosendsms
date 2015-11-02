@@ -1,13 +1,25 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff" >
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical" >
+    <TextView
+        android:id="@+id/catalog"
+        android:layout_width="match_parent"
+        android:layout_height="22dp"
+        android:background="#D5D5D5"
+        android:textColor="#808080"
+        android:gravity="start|center"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:textSize="14sp"
+        android:text="A"/>
     <RelativeLayout
         android:id="@+id/relative1"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:paddingStart="0dp"
+        android:paddingEnd="30dp"
         android:background="#ffffff" >
 
         <TextView
@@ -52,4 +64,4 @@
             android:text="科室" />
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>
