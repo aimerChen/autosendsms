@@ -12,7 +12,7 @@ public class TimeDao extends BaseDao<MyTime,Integer>{
 	private Context mContext;
 	
 	public TimeDao(Context context) {
-		super(context);
+		mContext=context;
 	}
 	@Override
 	public Dao<MyTime, Integer> getDao() throws SQLException {

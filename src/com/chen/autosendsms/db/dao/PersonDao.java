@@ -18,7 +18,6 @@ public class PersonDao extends BaseDao<Person,Integer> implements PersonService{
 	
 	private Context mContext;
 	public PersonDao(Context context) {
-		super(context);
 		mContext=context;
 	}
 	

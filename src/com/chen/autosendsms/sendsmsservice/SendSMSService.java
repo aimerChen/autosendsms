@@ -8,215 +8,220 @@ import com.chen.autosendsms.db.dao.NoteDao;
 import com.chen.autosendsms.db.dao.PersonDao;
 import com.chen.autosendsms.db.entities.Note;
 import com.chen.autosendsms.db.entities.Person;
+import com.chen.autosendsms.utils.Parameters;
 import com.chen.autosendsms.utils.Utils;
 
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.telephony.SmsManager;
-import android.util.Log;
 
 public class SendSMSService extends Service {
 
+	private String TAG = "SendSMSService";
 	private List<Person> mList;
-	// private ServiceFactory mServiceFactory=null;
 	private PersonDao mPersonDao = null;
 	private NoteDao mNoteDao = null;
 	private TimerTask mTimerTask = null;
 	private Timer mTimer;
-	private static Thread mThread;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
+//		return mBinder;
 		return null;
 	}
-
+	
 	/**
-	 * 开机启动服务，先知道今天有没有发送
+	 * 实现GuardServiceInterface中的接口;
+	 * 可以在拥有此service对象并绑定了实现此接口的ServiceConnection的服务类中可以调用，显示夸进程调用
 	 */
+//	private final GuardServiceInterface.Stub mBinder = new GuardServiceInterface.Stub() {
+//	    public int getPid(){
+//	    	Utils.printLog(1, TAG, "getPid:"+0);
+//	        return 0;
+//	    }
+//	    public void basicTypes(int anInt) {
+//	    	Utils.printLog(1, TAG, "basicTypes:"+anInt);
+//	    }
+//	};
+
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.i("SendSMSService", "SendSMSService onCreate");
-
-		Utils.WriteLog("SendSMSService onCreate");
+		Utils.printLog(1, TAG, "onCreate");
+		if(initialDao()){
+			startSchedule();
+		}
+	}
+	
+	/**
+	 * initialize dao
+	 * @return
+	 */
+	private boolean initialDao(){
 		mPersonDao = new PersonDao(getApplicationContext());
 		mNoteDao = new NoteDao(getApplicationContext());
 		if (mPersonDao == null || mNoteDao == null) {
-			Utils.WriteLog("SendSMSService mPersonService初始化失败，服务退出");
-			return;
+			Utils.printLog(2, TAG, "initialize dao failed");
+			return false;
 		}
-		// mServiceFactory=ServiceFactory.getServiceFactory(getApplicationContext());
-		// mPersonDao=mServiceFactory.getPersonService();
-		if (mTimer != null) {
-			mTimer.cancel();
-			mTimer = null;
-		}
+		return true;
+	}
+
+	/**
+	 * start schedule to scan database and then retrieve contacts whose birthday
+	 * is today
+	 */
+	private void startSchedule() {
 		if (mTimerTask != null) {
 			mTimerTask.cancel();
 			mTimerTask = null;
 		}
-		mTimerTask = new TimerTask() {
-
-			@Override
-			public void run() {
-				checkTime(getApplicationContext());
-			}
-
-		};
-		mTimer = new Timer();
-		mTimer.schedule(mTimerTask, 0, 1800 * 1000);
-
-		Utils.WriteLog("SendSMSService mTimer启动");
-	}
-
-	private void checkTime(Context context) {
-
-		Utils.WriteLog("SendSMSService checkTime");
-		// mServiceFactory=ServiceFactory.getServiceFactory(getApplicationContext());
-		// mPersonDao=mServiceFactory.getPersonService();
-		Log.e("SendSMSService", "设置的时间＝" + Utils.isRightTime(context));
-		if (Utils.isRightTime(context)) {// 是设置的时间点吗
-			mList = mPersonDao.getOneDayPerson(System.currentTimeMillis() / 1000);
-			new Thread() {
-				@Override
-				public void run() {
-
-					Utils.WriteLog("SendSMSService sendAllSMS开始");
-					sendAllSMS();
-				}
-			}.start();
-			// Utils.setSendSMSToday(getApplicationContext(), true);//今天已经发送了
-			Log.e("SendSMSService", "到点了，并且刚发送了");
-			Utils.WriteLog("SendSMSService 到点了，并且刚发送了");
+		if (mTimer != null) {
+			// If there is a currently running task it is not affected
+			mTimer.cancel();
+			mTimer = null;
 		}
-		// else{
-		// Log.e("SendSMSService","不是9点");
-		// if(!Utils.hasSendSMSToday(getApplicationContext())){//今天没有发送短信//&&Utils.isRightTime()
-		// Log.e("SendSMSService","不是9点，但是没有发送");
-		// mList=mPersonDao.getOneDayPerson(System.currentTimeMillis()/1000);
-		// new Thread(){
-		// @Override
-		// public void run(){
-		//// sendAllSMS();
-		// }
-		// }.start();
-		// Log.e("SendSMSService","不是9点，但是没有发送，刚发送了");
-		// Utils.setSendSMSToday(getApplicationContext(), true);//今天已经发送了
-		// }else{
-		// Log.e("SendSMSService","不是9点，而且已经发送了");
-		// }
-		// }
+		mTimerTask = new MyTimerTask();
+		mTimer = new Timer();
+		if(Parameters.DEBUG){
+			mTimer.schedule(mTimerTask, 0, 5 * 1000);
+		}else{
+			mTimer.schedule(mTimerTask, 0, 1800 * 1000);
+		}
 	}
 
-	private void sendAllSMS() {
-		Log.i("SendSMSService", "SendSMSService sendAllSMS");
-		if (mList != null && mList.size() > 0) {
-			for (Person person : mList) {
-				sendSMS(person);
+	private class MyTimerTask extends TimerTask {
+
+		@Override
+		public void run() {
+			Utils.printLog(1, TAG, "isSwitchOn:" + isSwitchOn());
+			if (isSwitchOn()&&Utils.isRightTime(getApplicationContext())) {
+				retrieveContactsFromDB();
+				sendSMSToAll();
 			}
 		}
 	}
 
 	/**
-	 * 发送短信
+	 * whether auto sending sms is allowed
+	 * 
+	 * @return
+	 */
+	private boolean isSwitchOn() {
+		return Utils.getPreferenceBoolean(Parameters.AUTO_SEND_SMS_KEY, getApplicationContext());
+	}
+
+	/**
+	 * retrieve contact from database
+	 */
+	private void retrieveContactsFromDB(){
+		mList = mPersonDao.getOneDayPerson(System.currentTimeMillis() / 1000);
+	}
+
+	private void sendSMSToAll() {
+		Utils.printLog(1,TAG,"sendAllSMS");
+		mThreadSendSMS.run();
+	}
+	
+	/**
+	 * 发送sms线程
+	 */
+	private Runnable mThreadSendSMS=new Runnable(){
+
+		@Override
+		public void run() {
+			if (mList != null && mList.size() > 0) {
+				for (Person contact : mList) {
+					sendSMSToContact(contact);
+				}
+			}
+		}
+	};
+	
+
+	/**
+	 * Send sms
 	 * 
 	 * @param phoneNumber
 	 */
-	private void sendSMS(Person person) {
-		try {
-			if (person.getPhoneNumber() == null || person.getPhoneNumber().length() <= 0) {
-				return;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
+	private void sendSMSToContact(Person contact) {
+		// whether it has sent sms to contacts whose birthday is today
+		long date = contact.getDateSendSMS();
+		if (!Utils.hasSentSMSToday(date)) {
+			Utils.printLog(1, TAG, "has not sent sms today");
+			String content=getSendNote(contact);
+			sendSMSToPhone(content,contact.getPhoneNumber());
+			contact.setDateSendSMS(System.currentTimeMillis() / 1000);
+			updatePerson(contact);
+		} else {
+			Utils.printLog(1, TAG, "has sent sms today");
 		}
 
-		// 判断今天是否发送过
+	}
 
-		long date = person.getDateSendSMS();
-		if (!Utils.hasSentSMSToday(date)) {// 今天已经发过了？没有
+	/**
+	 * create note
+	 * @param contact
+	 * @return
+	 */
+	private String getSendNote(Person contact){
+		StringBuilder content = new StringBuilder();
+		content.append("亲爱的战友，" ).append(contact.getLastName())
+			.append(contact.getFirstName()).append("：");
+		Note note = mNoteDao.queryForTheFirst();
+		if (note != null && note.getNote() != null) {
+			content.append(note.getNote());
+		}
+		return content.toString();
+	}
 
-			Utils.WriteLog("SendSMSService 今天没有发送");
-			Log.i("SendSMSService", "SendSMSService sendSMS " + person.getPhoneNumber());
-
-			String content = "亲爱的战友，" + person.getLastName() + person.getFirstName() + "：";
-			Note note=null;
-			note = mNoteDao.queryForTheFirst();
-			if (note != null && note.getNote() != null) {
-				Log.e("SendSMSService", "mnote不为空");
-				Utils.WriteLog("SendSMSService mnote不为空");
-				content += note.getNote();
-			}
-
+	/**
+	 * send sms to phone number
+	 * @param content
+	 * @param phoneNumber
+	 */
+	private void sendSMSToPhone(String content,String phoneNumber){
+		if(phoneNumber!=null&&!phoneNumber.equals("")&&
+				phoneNumber.length()==Parameters.PHONE_NUMBER_LENGTH){
 			SmsManager smsManager = SmsManager.getDefault();
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(), 0);
 			if (content.length() > 70) {
 				List<String> contents = smsManager.divideMessage(content);
 				for (String str : contents) {
-					smsManager.sendTextMessage(person.getPhoneNumber(), null, str, pendingIntent, null);
+					smsManager.sendTextMessage(phoneNumber, null, str, pendingIntent, null);
 				}
 			} else {
-				smsManager.sendTextMessage(person.getPhoneNumber(), null, content, pendingIntent, null);
-			}
-			person.setDateSendSMS(System.currentTimeMillis() / 1000);
-			if (mPersonDao != null) {
-				mPersonDao.update(person);
-			}
-		} else {
-			Utils.WriteLog("SendSMSService 今天发送了");
-			Log.e("SendSMSService", "今天已经发送了");
+				smsManager.sendTextMessage(phoneNumber, null, content, pendingIntent, null);
+			}	
 		}
-
 	}
-
+	
+	/**
+	 * update contact
+	 * @param contact
+	 */
+	private void updatePerson(Person contact){
+		if (mPersonDao != null) {
+			mPersonDao.update(contact);
+		}
+	}
+	
 	@Override
 	public void onDestroy() {
-		super.onDestroy();
-		Log.i("SendSMSService", "SendSMSService onDestroy");
-		Log.i("SendSMSService", "SendSMSService 重新开启");
+		Utils.printLog(1,TAG, "onDestroy");
 		Intent intent = new Intent();
 		intent.setAction("SendSMSServiceReboot");
 		getApplicationContext().sendBroadcast(intent);
-
-		Utils.WriteLog("SendSMSService SendSMSService onDestroy");
-		// Intent intent=new Intent();
-		// intent.setClass(getApplicationContext(), SendSMSService.class);
-		// startService(intent);
+		super.onDestroy();
 	}
 
+	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.i("SendSMSService", "onStartCommand startId=" + startId);
-		startDaemon();
-		return super.onStartCommand(intent, flags, startId);
-	}
-
-	private void startDaemon() {
-		if (mThread == null || !mThread.isAlive()) {
-			mThread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					while (true) {
-						if (!Utils.isServiceAlive(SendSMSService.this,
-								"com.chen.autosendsms.sendsmsservice.GuardService")) {
-							System.out.println("检测到服务GuardService不存在.....");
-							Intent intent=new Intent();
-					    	intent.setClass(getApplicationContext(), GuardService.class);
-							startService(intent);
-						}
-						try {
-							Thread.sleep(1800 * 1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			});
-			mThread.start();
-		}
+		Utils.printLog(1,TAG, "onStartCommand startId=" + startId);
+		return super.onStartCommand(intent, flags, startId);	
 	}
 }

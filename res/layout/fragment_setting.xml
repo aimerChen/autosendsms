@@ -79,6 +79,40 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/cut_off_rule_color" />
+
+        <RelativeLayout
+            android:id="@+id/setting_switch_rel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fragment_setting_rel_height" >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/setting_switch_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/fragment_setting_switch"
+                    android:textColor="@color/black" />
+
+                <com.chen.autosendsms.ui.view.CheckSwitchButton
+                    android:id="@+id/setting_switch_btn"
+                    android:layout_width="@dimen/fragment_setting_whell_width"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="center"
+                    android:enabled="true" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/cut_off_rule_color" />
     </LinearLayout>
 
 </RelativeLayout>

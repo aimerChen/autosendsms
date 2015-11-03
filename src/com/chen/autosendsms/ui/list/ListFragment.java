@@ -9,12 +9,12 @@ import com.chen.autosendsms.R;
 import com.chen.autosendsms.db.dao.PersonDao;
 import com.chen.autosendsms.db.entities.Person;
 import com.chen.autosendsms.ui.contacts.AddAndEditContactActivity;
-import com.chen.autosendsms.ui.contacts.sort.CharacterParser;
-import com.chen.autosendsms.ui.contacts.sort.ClearEditText;
-import com.chen.autosendsms.ui.contacts.sort.PinyinComparator;
-import com.chen.autosendsms.ui.contacts.sort.SideBar;
-import com.chen.autosendsms.ui.contacts.sort.SideBar.OnTouchingLetterChangedListener;
-import com.chen.autosendsms.ui.contacts.sort.SortModel;
+import com.chen.autosendsms.ui.view.sort.CharacterParser;
+import com.chen.autosendsms.ui.view.sort.ClearEditText;
+import com.chen.autosendsms.ui.view.sort.PinyinComparator;
+import com.chen.autosendsms.ui.view.sort.SideBar;
+import com.chen.autosendsms.ui.view.sort.SideBar.OnTouchingLetterChangedListener;
+import com.chen.autosendsms.ui.view.sort.SortModel;
 import com.chen.autosendsms.utils.Utils;
 
 import android.annotation.SuppressLint;
@@ -41,7 +41,7 @@ public class ListFragment extends Fragment {
 	// listview
 	private ListView mListView;
 	private List<Person> mList;
-	private List<SortModel> SourceDateList;
+	private List<SortModel<Person>> SourceDateList;
 	// search
 	private ClearEditText mClearEditText;
 	private MySortAdapter mAdapter;
@@ -65,7 +65,7 @@ public class ListFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		ViewGroup view = (ViewGroup) inflater.inflate(R.layout.activity_main, container, false);
+		ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_birthday_contact_list, container, false);
 		initViews(view);
 		return view;
 	}
@@ -98,7 +98,7 @@ public class ListFragment extends Fragment {
 		mListView.setDividerHeight(0);
 		// adapter
 		mList = new ArrayList<Person>();
-		SourceDateList=new ArrayList<SortModel>();
+		SourceDateList=new ArrayList<SortModel<Person>>();
 		mAdapter = new MySortAdapter(getActivity(),SourceDateList);
 		mListView.setAdapter(mAdapter);
 
@@ -126,10 +126,10 @@ public class ListFragment extends Fragment {
 	 * @param date
 	 * @return
 	 */
-	private List<SortModel> filledData(List<Person> data) {
-		List<SortModel> mSortList = new ArrayList<SortModel>();
+	private List<SortModel<Person>> filledData(List<Person> data) {
+		List<SortModel<Person>> mSortList = new ArrayList<SortModel<Person>>();
 		for (Person person : data) {
-			SortModel sortModel = new SortModel();
+			SortModel<Person> sortModel = new SortModel<Person>();
 			sortModel.setModel(person);
 			// 汉字转换成拼音
 			String pinyin = characterParser.getSelling(person.getLastName());
@@ -154,16 +154,17 @@ public class ListFragment extends Fragment {
 	 * @param filterStr
 	 */
 	private void filterData(String filterStr) {
-		List<SortModel> filterDateList = new ArrayList<SortModel>();
+		List<SortModel<Person>> filterDateList = new ArrayList<SortModel<Person>>();
 
 		if (TextUtils.isEmpty(filterStr)) {
 			filterDateList = SourceDateList;
 		} else {
 			filterDateList.clear();
-			for (SortModel sortModel : SourceDateList) {
-				String name = sortModel.getModel().getLastName();
+			for (SortModel<Person> sortModel : SourceDateList) {
+				StringBuilder name =new StringBuilder();
+				name.append(sortModel.getModel().getLastName()).append(sortModel.getModel().getFirstName());
 				if (name.indexOf(filterStr.toString()) != -1
-						|| characterParser.getSelling(name).startsWith(filterStr.toString())) {
+						|| characterParser.getSelling(name.toString()).startsWith(filterStr.toString())) {
 					filterDateList.add(sortModel);
 				}
 			}
@@ -171,7 +172,7 @@ public class ListFragment extends Fragment {
 
 		// 根据a-z进行排序
 		Collections.sort(filterDateList, pinyinComparator);
-		setContactNumberText(SourceDateList.size());
+		setContactNumberText(filterDateList.size());
 		mAdapter.updateListView(filterDateList);
 	}
 
@@ -261,7 +262,7 @@ public class ListFragment extends Fragment {
 	 * 
 	 * @param position
 	 */
-	private void deleteAlert(final List<SortModel> list, final int position) {
+	private void deleteAlert(final List<SortModel<Person>> list, final int position) {
 		if (list.get(position) != null) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle("要删除这个联系人码？").setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -292,10 +293,10 @@ public class ListFragment extends Fragment {
 	}
 
 	private class MySortAdapter extends BaseAdapter implements SectionIndexer {
-		private List<SortModel> myList = null;
+		private List<SortModel<Person>> myList = null;
 		private Context mContext;
 
-		public MySortAdapter(Context mContext, List<SortModel> list) {
+		public MySortAdapter(Context mContext, List<SortModel<Person>> list) {
 			this.mContext = mContext;
 			this.myList = list;
 		}
@@ -305,7 +306,7 @@ public class ListFragment extends Fragment {
 		 * 
 		 * @param list
 		 */
-		public void updateListView(List<SortModel> list) {
+		public void updateListView(List<SortModel<Person>> list) {
 			this.myList = list;
 			notifyDataSetChanged();
 		}
@@ -327,8 +328,8 @@ public class ListFragment extends Fragment {
 
 		@SuppressLint("InflateParams")
 		public View getView(final int position, View convertView, ViewGroup arg2) {
-			final SortModel mContent = myList.get(position);
-			final Person person = mContent.getModel();
+			final SortModel<Person> mContent = myList.get(position);
+			final Person person = (Person) mContent.getModel();
 			ViewHolder holder = null;
 			if (convertView == null) {
 				holder = new ViewHolder();

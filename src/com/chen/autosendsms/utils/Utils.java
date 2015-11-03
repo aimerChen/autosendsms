@@ -23,6 +23,7 @@ import com.chen.autosendsms.db.entities.Person;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
@@ -34,20 +35,37 @@ import jxl.read.biff.BiffException;
 
 public class Utils {
 
-	private static boolean DEBUG = true;
-
 	@SuppressLint("SimpleDateFormat")
 	public static String getTS() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		return sdf.format(new Date());
 	}
 
+	/**
+	 * print log on console
+	 * 
+	 * @param type
+	 *            1:Log.i; 2:Log.e
+	 * @param message
+	 */
+	public static void printLog(int type, String tag, String message) {
+		if (!Parameters.DEBUG) {
+			return;
+		}
+		if (type == 1) {
+			Log.i(tag, message);
+		} else {
+			Log.e(tag, message);
+		}
+
+	}
+
 	public static void WriteLog(String content) {
-		if (!DEBUG) {
+		if (!Parameters.DEBUG) {
 			return;
 		}
 		if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-			File file = new File(Environment.getExternalStorageDirectory() + "/AutoSendSMS.txt");
+			File file = new File(Environment.getExternalStorageDirectory() + "AutoSendSMS.txt");
 			if (!file.exists()) {
 				try {
 					file.createNewFile();
@@ -117,20 +135,18 @@ public class Utils {
 	 * @return
 	 */
 	public static boolean isRightTime(Context context) {
-		TimeDao dao= new TimeDao(context);
-		MyTime time =dao.queryForTheFirst();
+		TimeDao dao = new TimeDao(context);
+		MyTime time = dao.queryForTheFirst();
 		boolean isRightTime = false;
-		if(time!=null){
-			if (time.getTime() > 24 || time.getTime() < 0) {
-				return false;
-			}
+		if (time != null && time.getTime() < 24 && time.getTime() >= 0) {
 			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeZone(TimeZone.getDefault());
 			int hour = calendar.get(Calendar.HOUR_OF_DAY);
 			if (hour == time.getTime()) {
 				isRightTime = true;
 			}
 		}
-		dao=null;
+		dao = null;
 		return isRightTime;
 	}
 
@@ -165,16 +181,15 @@ public class Utils {
 
 	@SuppressLint("SimpleDateFormat")
 	public static int[] getBirthdayArray(long ts) {
-		int[] result=new int[3];
-		Calendar cal=Calendar.getInstance();
-		cal.setTimeInMillis(ts*1000);
-		result[0]=cal.get(Calendar.YEAR);
-		result[1]=cal.get(Calendar.MONTH);
-		result[2]=cal.get(Calendar.DAY_OF_MONTH);
+		int[] result = new int[3];
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(ts * 1000);
+		result[0] = cal.get(Calendar.YEAR);
+		result[1] = cal.get(Calendar.MONTH);
+		result[2] = cal.get(Calendar.DAY_OF_MONTH);
 		return result;
 	}
-	
-	
+
 	/**
 	 * 生日的月和日
 	 * 
@@ -216,13 +231,11 @@ public class Utils {
 	public static boolean hasSentSMSToday(long date) {
 		Calendar calendar1 = Calendar.getInstance();
 		int year = calendar1.get(Calendar.YEAR);
-		Log.e("hasTodaySendSMS", "year=" + year);
 		int month = calendar1.get(Calendar.MONTH);// 0-11
 		int day = calendar1.get(Calendar.DAY_OF_MONTH);
 
 		calendar1.setTimeInMillis(date * 1000);
 		int year1 = calendar1.get(Calendar.YEAR);
-		Log.e("hasTodaySendSMS", "year=" + year1);
 		int month1 = calendar1.get(Calendar.MONTH);// 0-11
 		int day1 = calendar1.get(Calendar.DAY_OF_MONTH);
 		if (year == year1 && month == month1 && day1 == day) {
@@ -239,27 +252,60 @@ public class Utils {
 	}
 
 	/**
+	 * set preference values
+	 * 
+	 * @param key
+	 * @param value
+	 * @param context
+	 */
+	public static boolean setPreferenceValue(String key, Object value, Context context) {
+		SharedPreferences pre = context.getSharedPreferences(Parameters.APPLICATION_PREFERENCE_KEY,
+				Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = pre.edit();
+		if (value instanceof Boolean) {
+			editor.putBoolean(key, (Boolean) value);
+		} else if (value instanceof String) {
+			editor.putString(key, (String) value);
+		}
+		return editor.commit();
+	}
+
+	/**
+	 * set preference values
+	 * 
+	 * @param key
+	 * @param value
+	 * @param context
+	 */
+	public static boolean getPreferenceBoolean(String key, Context context) {
+		SharedPreferences pre = context.getSharedPreferences(Parameters.APPLICATION_PREFERENCE_KEY,
+				Context.MODE_PRIVATE);
+		return pre.getBoolean(key, true);
+	}
+
+	/**
 	 * 从xls文件中读取联系人
+	 * 
 	 * @param file
 	 * @return
 	 */
-	public static List<Person> readContactsFromFile(File file){
+	public static List<Person> readContactsFromFile(File file) {
 		String NAME = "name";
 		String BIRTHDAY = "birthday";
 		String PHONENUMBER = "phone";
 		int name_order = 0;
 		int birthday_order = 0;
 		int phonenumber_order = 0;
-		List<Person> list=new ArrayList<Person>();
+		List<Person> list = new ArrayList<Person>();
 		if (file.canRead()) {
-			InputStream is=null;
+			InputStream is = null;
 			try {
 				is = new FileInputStream(file);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				return null;
 			}
-			Workbook book=null;
+			Workbook book = null;
 			try {
 				book = Workbook.getWorkbook(is);
 			} catch (BiffException e) {
@@ -289,7 +335,7 @@ public class Utils {
 						}
 					}
 				}
-				Person person=null;
+				Person person = null;
 				String name = "";
 				for (int i = 1; i < Rows; i++) {//
 					person = new Person();
@@ -300,8 +346,7 @@ public class Utils {
 							person.setLastName(name);
 						} else if (birthday_order == j) {
 							// birthday column
-							person.setBirthday(
-									Utils.getBirthdayTS(sheet.getRow(i)[j].getContents().replace(".", "-")));
+							person.setBirthday(Utils.getBirthdayTS(sheet.getRow(i)[j].getContents().replace(".", "-")));
 						} else if (phonenumber_order == j) {
 							// phone number column
 							person.setPhoneNumber(sheet.getRow(i)[j].getContents());
@@ -316,5 +361,5 @@ public class Utils {
 		}
 		return list;
 	}
-	
+
 }

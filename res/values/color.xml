@@ -19,4 +19,8 @@
     <!-- normal color -->
     <color name="black">#000000</color>
     
+    
+    <!-- contact side bar -->
+    <color name="contact_side_bar_text">#3399ff</color>
+    
 </resources>

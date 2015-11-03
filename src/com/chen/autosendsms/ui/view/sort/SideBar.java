@@ -1,4 +1,4 @@
-package com.chen.autosendsms.ui.contacts.sort;
+package com.chen.autosendsms.ui.view.sort;
 
 import com.chen.autosendsms.R;
 
@@ -60,7 +60,7 @@ public class SideBar extends View {
 			paint.setTextSize(30);
 			// 选中的状态
 			if (i == choose) {
-				paint.setColor(Color.parseColor("#3399ff"));
+				paint.setColor(getResources().getColor(R.color.contact_side_bar_text));
 				paint.setFakeBoldText(true);
 			}
 			// x坐标等于中间-字符串宽度的一半.

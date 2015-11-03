@@ -47,7 +47,7 @@ public class ContactsFragment2 extends Fragment implements OnClickListener {
 	private AlertDialog dialog = null;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		ViewGroup view = (ViewGroup) inflater.inflate(R.layout.activity_contacts, container, false);
+		ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_contacts, container, false);
 		initial(view);
 		return view;
 	}

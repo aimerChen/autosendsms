@@ -6,7 +6,6 @@ import com.chen.autosendsms.sendsmsservice.SendSMSService;
 import com.chen.autosendsms.ui.contacts.ContactsFragment;
 import com.chen.autosendsms.ui.list.ListFragment;
 import com.chen.autosendsms.ui.setting.SettingFragment;
-import com.chen.autosendsms.utils.Utils;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -26,6 +25,7 @@ import android.widget.Button;
  *
  */
 public class MenuActivity extends Activity implements OnClickListener{
+	
 	private Button mBtn_listfragment;
 	private Button mBtn_searchfragment;
 	private Button mBtn_settingfragment;
@@ -41,7 +41,7 @@ public class MenuActivity extends Activity implements OnClickListener{
 		DatabaseHelper.getDatabaseHelper(getApplicationContext()).getWritableDatabase();
 		initial();
 		changeFramgent();
-		startService();
+		startSendSMSService();
 	}
 	
 	private void initial(){
@@ -65,11 +65,20 @@ public class MenuActivity extends Activity implements OnClickListener{
 		}
 	}
     
-    private void startService(){
-    	Utils.WriteLog("MenuActivity启动service");
-    	Intent intent=new Intent();
-    	intent.setClass(getApplicationContext(), SendSMSService.class);
+    private void startSendSMSService(){
+    	Intent intent=new Intent(this, SendSMSService.class);
     	startService(intent);
+    }
+    
+//    private void startGuardService(){
+//    	Intent intent=new Intent(this,GuardService.class);
+//		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);  
+//    	startService(intent);
+//    }
+    
+    private void stopService(){
+    	Intent intent=new Intent(this, SendSMSService.class);
+		stopService(intent);
     }
 
 	@Override
@@ -102,12 +111,36 @@ public class MenuActivity extends Activity implements OnClickListener{
 		transaction.replace(R.id.fragment_container,mFragments[mCurrentFragment]);
 		//提交修改
 		transaction.commit();	
+//		try {
+//			mIRemoteServiceInterface.basicTypes(1);
+//		} catch (RemoteException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
 		DatabaseHelper.getDatabaseHelper(getApplicationContext()).close();
+		stopService();
 	}
-
+	
+	/**
+	 * for binding service; can be 
+	 */
+//	private ServiceConnection mConnection = new ServiceConnection() {
+//	    // Called when the connection with the service is established
+//	    public void onServiceConnected(ComponentName className, IBinder service) {
+//	        // Following the example above for an AIDL interface,
+//	        // this gets an instance of the IRemoteInterface, which we can use to call on the service
+//	    	mIRemoteServiceInterface = GuardServiceInterface.Stub.asInterface(service);
+//	    }
+//
+//	    // Called when the connection with the service disconnects unexpectedly
+//	    public void onServiceDisconnected(ComponentName className) {
+//	     	Utils.printLog(2,TAG, "Service has unexpectedly disconnected");
+//	     	mIRemoteServiceInterface = null;
+//	    }
+//	};
+//	
 }

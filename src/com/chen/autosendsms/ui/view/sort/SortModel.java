@@ -1,15 +1,13 @@
-package com.chen.autosendsms.ui.contacts.sort;
+package com.chen.autosendsms.ui.view.sort;
 
-import com.chen.autosendsms.db.entities.Person;
-
-public class SortModel{
-	private Person model;   //显示的数据
+public class SortModel<T>{
+	private T model;   
 	private String sortLetters;  //显示数据拼音的首字母
 	
-	public Person getModel() {
+	public T getModel() {
 		return model;
 	}
-	public void setModel(Person model) {
+	public void setModel(T model) {
 		this.model = model;
 	}
 	public String getSortLetters() {

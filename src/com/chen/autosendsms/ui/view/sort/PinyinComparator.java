@@ -1,4 +1,4 @@
-package com.chen.autosendsms.ui.contacts.sort;
+package com.chen.autosendsms.ui.view.sort;
 
 import java.util.Comparator;
 

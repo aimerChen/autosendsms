@@ -12,7 +12,7 @@ public class NoteDao extends BaseDao<Note,Integer>{
 	
 	private Context mContext;
 	public NoteDao(Context context){
-		super(context);
+		mContext=context;
 	}
 
 	@Override

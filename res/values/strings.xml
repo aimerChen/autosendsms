@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">AutoSendSMS</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">智能短信</string>
     <string name="action_settings">Settings</string>
 
     
@@ -15,6 +14,7 @@
     <string name="fragment_setting_title">设置</string>
     <string name="fragment_setting_sms_content">短信内容</string>
     <string name="fragment_setting_send_time">发送时间</string>
+    <string name="fragment_setting_switch">自动发送</string>
     
     <!-- fragment add contact -->
     <string name="fragment_add_contact_title">添加联系人</string>

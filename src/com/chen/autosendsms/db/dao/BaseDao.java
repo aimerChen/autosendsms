@@ -13,17 +13,9 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
-import android.content.Context;
-
 @SuppressWarnings("hiding")
 public abstract class  BaseDao<T, Integer> {
 	  
-    protected Context mContext;  
-  
-    public BaseDao(Context context) {  
-        mContext = context;  
-    }  
-
     public abstract Dao<T, Integer> getDao() throws SQLException;  
   
     public int save(T t){
