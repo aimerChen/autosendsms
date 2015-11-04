@@ -1,4 +1,4 @@
-package com.chen.autosendsms.ani;
+package com.chen.autosendsms.ui.view.switchbutton.ani;
 
 import android.os.Handler;
 import android.os.Message;

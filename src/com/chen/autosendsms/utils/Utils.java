@@ -22,9 +22,17 @@ import com.chen.autosendsms.db.entities.Person;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -362,4 +370,76 @@ public class Utils {
 		return list;
 	}
 
+	/**
+	 * 拨打电话弹框
+	 * 
+	 * @param number
+	 * @param context
+	 */
+	public static void dialDialog(final String number, final Context context) {
+		if (context != null) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(context);
+			builder.setCancelable(true).setNegativeButton("取消", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			}).setPositiveButton("确定", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dial(number, context);
+					dialog.dismiss();
+				}
+			}).setTitle(number);
+			builder.create().show();
+		}
+	}
+
+	/**
+	 * 拨打电话
+	 * 
+	 * @param number
+	 * @param context
+	 */
+	public static void dial(String number, Context context) {
+		Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 读取本地联系人
+	 * 
+	 * @return
+	 */
+	public static List<Person> readLocalContacts(Context context) {
+		List<Person> list=new ArrayList<Person>();
+		Person person=null;
+		ContentResolver resolver = context.getContentResolver();
+		Cursor phoneCursor = resolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+		if (phoneCursor != null) {
+			while (phoneCursor.moveToNext()) {
+				person=new Person();
+				// 得到手机号码
+				String id = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.Contacts._ID));
+				String name = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+				// 获得联系人手机号码
+				Cursor phone = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+						ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + id, null, null);
+				if (phone != null) {
+					while (phone.moveToNext()) { // 取得电话号码(可能存在多个号码)
+						int phoneFieldColumnIndex = phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+						String phoneNumber = phone.getString(phoneFieldColumnIndex);
+						person.setPhoneNumber(phoneNumber);
+					}
+					phone.close();
+				}
+				person.setLastName(name);
+				list.add(person);
+			}
+			phoneCursor.close();
+		}
+		return list;
+	}
 }

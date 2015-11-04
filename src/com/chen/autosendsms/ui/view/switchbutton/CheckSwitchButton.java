@@ -1,7 +1,8 @@
-package com.chen.autosendsms.ui.view;
+package com.chen.autosendsms.ui.view.switchbutton;
 
 import com.chen.autosendsms.R;
-import com.chen.autosendsms.ani.FrameAnimationController;
+import com.chen.autosendsms.ui.view.switchbutton.ani.FrameAnimationController;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;

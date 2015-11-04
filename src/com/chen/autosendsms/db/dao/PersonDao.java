@@ -2,6 +2,7 @@ package com.chen.autosendsms.db.dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.chen.autosendsms.db.DatabaseHelper;
@@ -28,23 +29,27 @@ public class PersonDao extends BaseDao<Person,Integer> implements PersonService{
 	
 	@Override
 	public List<Person> getOneDayPerson(long ts) {
-		List<Person> mlist=new ArrayList<Person>();
 		List<Person> list=new ArrayList<Person>();
 		int[] monthAndDay=Utils.getMonthAndDayofTs(ts);
 		int[] monthAndDay2=new int[2];
 		try {
 			list=getDao().queryForAll();
-			for(Person person:list){
-				monthAndDay2=Utils.getMonthAndDayofTs(person.getBirthday());
-				if((monthAndDay[0]==monthAndDay2[0])&&(monthAndDay[1]==monthAndDay2[1])){
-					mlist.add(person);
+			if(list!=null){
+				Iterator<Person> it=list.iterator();
+				Person person=null;
+				while(it.hasNext()){
+					person=it.next();
+					monthAndDay2=Utils.getMonthAndDayofTs(person.getBirthday());
+					if((monthAndDay[0]!=monthAndDay2[0])||(monthAndDay[1]!=monthAndDay2[1])){
+						it.remove();
+					}
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return mlist;
+			return list;
 		} 
-		return mlist;
+		return list;
 	}
 
 	@Override

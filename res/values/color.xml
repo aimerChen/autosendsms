@@ -15,6 +15,7 @@
     
     <!-- fragment contacts -->
     <color name="fragment_contacts_des">#696969</color>
+    <color name="fragment_contacts_item_phone_number">#30b0a0</color>
     
     <!-- normal color -->
     <color name="black">#000000</color>

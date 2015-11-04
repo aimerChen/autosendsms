@@ -11,26 +11,20 @@
         android:layout_height="@dimen/avtivity_title_height"
         android:background="@color/titlebar_backgournd" >
 
-		<TextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="@string/activity_import_contacts_title"
-            android:textStyle="bold"
+            android:text="@string/activity_import_local_contacts_title"
             android:textColor="@color/titlebar_text_color"
-            android:textSize="@dimen/avtivity_title_text_size" />
+            android:textSize="@dimen/avtivity_title_text_size"
+            android:textStyle="bold" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ListView
-            android:id="@+id/filelist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
-    </RelativeLayout>
-
+        android:layout_height="match_parent" >
+    </FrameLayout>
 </LinearLayout>

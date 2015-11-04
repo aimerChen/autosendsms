@@ -5,7 +5,10 @@ import java.util.Calendar;
 import com.chen.autosendsms.R;
 import com.chen.autosendsms.db.dao.TimeDao;
 import com.chen.autosendsms.db.entities.MyTime;
-import com.chen.autosendsms.ui.view.CheckSwitchButton;
+import com.chen.autosendsms.ui.view.switchbutton.CheckSwitchButton;
+import com.chen.autosendsms.ui.view.wheel.OnWheelChangedListener;
+import com.chen.autosendsms.ui.view.wheel.WheelView;
+import com.chen.autosendsms.ui.view.wheel.adapters.NumericWheelAdapter;
 import com.chen.autosendsms.utils.Parameters;
 import com.chen.autosendsms.utils.Utils;
 
@@ -21,9 +24,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import kankan.wheel.widget.OnWheelChangedListener;
-import kankan.wheel.widget.WheelView;
-import kankan.wheel.widget.adapters.NumericWheelAdapter;
 
 public class SettingFragment extends Fragment implements OnClickListener{
 	

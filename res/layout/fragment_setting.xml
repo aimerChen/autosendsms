@@ -67,7 +67,7 @@
                     android:text="@string/fragment_setting_send_time"
                     android:textColor="@color/black" />
 
-                <kankan.wheel.widget.WheelView
+                <com.chen.autosendsms.ui.view.wheel.WheelView
                     android:id="@+id/hourwheel"
                     android:layout_width="@dimen/fragment_setting_whell_width"
                     android:layout_height="match_parent"
@@ -99,7 +99,7 @@
                     android:text="@string/fragment_setting_switch"
                     android:textColor="@color/black" />
 
-                <com.chen.autosendsms.ui.view.CheckSwitchButton
+                <com.chen.autosendsms.ui.view.switchbutton.CheckSwitchButton
                     android:id="@+id/setting_switch_btn"
                     android:layout_width="@dimen/fragment_setting_whell_width"
                     android:layout_height="match_parent"

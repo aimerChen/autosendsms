@@ -38,7 +38,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/name"
             android:gravity="center"
-            android:textColor="#000000"
+            android:textColor="@color/fragment_contacts_item_phone_number"
             android:text="13662149999" />
 
         <TextView

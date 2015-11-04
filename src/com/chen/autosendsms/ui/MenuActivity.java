@@ -4,7 +4,7 @@ import com.chen.autosendsms.R;
 import com.chen.autosendsms.db.DatabaseHelper;
 import com.chen.autosendsms.sendsmsservice.SendSMSService;
 import com.chen.autosendsms.ui.contacts.ContactsFragment;
-import com.chen.autosendsms.ui.list.ListFragment;
+import com.chen.autosendsms.ui.list.ListContactFragment;
 import com.chen.autosendsms.ui.setting.SettingFragment;
 
 import android.app.Activity;
@@ -52,7 +52,7 @@ public class MenuActivity extends Activity implements OnClickListener{
 		mFragmentManager=getFragmentManager();
         //mFragments
         mFragments=new Fragment[FRAGMENT_NUMBER];
-        mFragments[0]=new ListFragment();
+        mFragments[0]=new ListContactFragment();
         mFragments[1]=new ContactsFragment();
         mFragments[2]=new SettingFragment();
         

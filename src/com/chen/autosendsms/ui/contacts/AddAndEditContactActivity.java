@@ -6,6 +6,9 @@ import com.chen.autosendsms.R;
 import com.chen.autosendsms.db.dao.BaseDao;
 import com.chen.autosendsms.db.dao.PersonDao;
 import com.chen.autosendsms.db.entities.Person;
+import com.chen.autosendsms.ui.view.wheel.OnWheelChangedListener;
+import com.chen.autosendsms.ui.view.wheel.WheelView;
+import com.chen.autosendsms.ui.view.wheel.adapters.NumericWheelAdapter;
 import com.chen.autosendsms.utils.Utils;
 
 import android.app.Activity;
@@ -15,9 +18,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import kankan.wheel.widget.OnWheelChangedListener;
-import kankan.wheel.widget.WheelView;
-import kankan.wheel.widget.adapters.NumericWheelAdapter;
 
 /**
  * 添加员工activity

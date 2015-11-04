@@ -14,6 +14,9 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <!-- 向SDCard写入数据权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -49,6 +52,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="com.chen.autosendsms.ui.localcontact.LocalContactActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.chen.autosendsms.ui.contacts.ImportContactsActivity"
             android:screenOrientation="portrait" >
         </activity>
@@ -61,13 +68,14 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name="com.chen.autosendsms.sendsmsservice.SendSMSService" >
+        <service android:name="com.chen.autosendsms.sendsmsservice.SendSMSService" >
         </service>
+        <!--
         <service
             android:name="com.chen.autosendsms.sendsmsservice.GuardService"
             android:process=":remote" >
         </service>
+        -->
     </application>
 
 </manifest>

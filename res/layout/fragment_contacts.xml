@@ -3,20 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff" >
+
     <RelativeLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/avtivity_title_height"
         android:background="@color/titlebar_backgournd" >
-		<TextView
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="@string/fragment_contacts_title"
-            android:textStyle="bold"
             android:textColor="@color/titlebar_text_color"
-            android:textSize="@dimen/avtivity_title_text_size" />
+            android:textSize="@dimen/avtivity_title_text_size"
+            android:textStyle="bold" />
+
         <ImageButton
             android:id="@+id/addContactMenu"
             android:layout_width="@dimen/fragment_rel_imagebutton_width"
@@ -27,106 +30,13 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rel2"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/fragment_rel2_height"
-        android:layout_below="@+id/title"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp" >
-
-    <com.chen.autosendsms.ui.view.sort.ClearEditText
-        android:id="@+id/filter_edit"
-        android:layout_marginTop="5dip"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/fragment_filter_edit_height"
-        android:drawableStart="@drawable/search_bar_icon_normal"
-        android:drawableEnd="@drawable/cancelbtn"
-        android:hint="@string/fragment_contacts_search_hint"
-        android:singleLine="true"
-        android:background="@drawable/bg_edittext"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:textSize="15.0dip" />
-
-        <RelativeLayout
-            android:id="@+id/rel2_top"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/fragment_rel2_top_height"
-            android:layout_below="@+id/filter_edit" >
-
-            <TextView
-                android:id="@+id/des_contact"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toLeftOf="@+id/contactsNumber"
-                android:gravity="center"
-                android:text="@string/fragment_contacts_text_all"
-                android:textColor="@color/fragment_contacts_des"
-                android:textSize="@dimen/fragment_rel2_top_text_size" />
-
-            <TextView
-                android:id="@+id/contactsNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toLeftOf="@+id/des_contact2"
-                android:gravity="center"
-                android:text="1"
-                android:textColor="@color/fragment_contacts_des"
-                android:textSize="@dimen/fragment_rel2_top_text_size" />
-
-            <TextView
-                android:id="@+id/des_contact2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:text="个联系人"
-                android:textColor="@color/fragment_contacts_des"
-                android:textSize="@dimen/fragment_rel2_top_text_size" />
-        </RelativeLayout>
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_below="@+id/rel2"
-        android:layout_marginLeft="5dp"
-        android:background="@color/cut_off_rule_color" />
-
-    <FrameLayout
-        android:id="@+id/rel3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rel2"
-        android:layout_margin="5dp" >
-
-        <ListView
-            android:dividerHeight="0dp"
-            android:scrollbars="none"
-            android:id="@+id/searchList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
-        
-        <TextView
-            android:id="@+id/dialog"
-            android:layout_width="80.0dip"
-            android:layout_height="80.0dip"
-            android:layout_gravity="center"
-            android:background="@android:color/darker_gray"
-            android:gravity="center"
-            android:textColor="#ffffffff"
-            android:textSize="30.0dip" 
-            android:visibility="invisible"/>
-
-        <com.chen.autosendsms.ui.view.sort.SideBar
-            android:id="@+id/sidrbar"
-            android:layout_width="30.0dip"
-            android:layout_height="fill_parent"
-            android:layout_gravity="right|center" />
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title" >
+		<include 
+		    layout="@layout/fragment_contact_sort_list"
+        	android:id="@+id/include_sort_contact_layout"/>
+   </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/rel_add_menu"
@@ -143,8 +53,21 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="@string/fragment_contacts_text_add_contact"
+            android:gravity="left|center"
+            android:paddingLeft="10dp"
             android:background="#00000000"
+            android:text="@string/fragment_contacts_text_add_contact"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/import_local_contact"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:paddingLeft="10dp"
+            android:background="#00000000"
+            android:text="@string/fragment_contacts_text_import_local_contact"
             android:textColor="#ffffff" />
 
         <Button
@@ -152,8 +75,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="@string/fragment_contacts_text_import_contact"
+            android:gravity="left|center"
+            android:paddingLeft="10dp"
             android:background="#00000000"
+            android:text="@string/fragment_contacts_text_import_contact"
             android:textColor="#ffffff" />
     </LinearLayout>
+
 </RelativeLayout>

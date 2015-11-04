@@ -4,18 +4,17 @@
     <string name="app_name">智能短信</string>
     <string name="action_settings">Settings</string>
 
-    
     <!-- activity main -->
     <string name="activity_menu_bar_list">生日列表</string>
     <string name="activity_menu_bar_contacts">联系人</string>
     <string name="activity_menu_bar_setting">设置</string>
-    
+
     <!-- fragment setting -->
     <string name="fragment_setting_title">设置</string>
     <string name="fragment_setting_sms_content">短信内容</string>
     <string name="fragment_setting_send_time">发送时间</string>
     <string name="fragment_setting_switch">自动发送</string>
-    
+
     <!-- fragment add contact -->
     <string name="fragment_add_contact_title">添加联系人</string>
     <string name="fragment_add_contact_button">保存</string>
@@ -23,23 +22,27 @@
     <string name="fragment_add_contact_text_firsttname">名字</string>
     <string name="fragment_add_contact_text_phone">电话</string>
     <string name="fragment_add_contact_text_birthday">生日</string>
-    
+
     <!-- fragment contacts -->
     <string name="fragment_contacts_title">联系人</string>
     <string name="fragment_contacts_search_hint">请输入要查找的人名</string>
     <string name="fragment_contacts_text_all">共有</string>
     <string name="fragment_contacts_text_all2">个联系人</string>
     <string name="fragment_contacts_text_add_contact">添加联系人</string>
-    <string name="fragment_contacts_text_import_contact">导入联系人</string>
-    
+    <string name="fragment_contacts_text_import_local_contact">手机联系人</string>
+    <string name="fragment_contacts_text_import_contact">联系人文件</string>
+
     <!-- fragment contacts list -->
     <string name="fragment_contacts_list_title">生日列表</string>
-    
+
     <!-- activity import contacts -->
-    <string name="activity_imiport_contacts_title">导入联系人</string>
-    
-    <!-- activity note  -->
+    <string name="activity_import_contacts_title">导入联系人</string>
+
+    <!-- activity import local contacts -->
+    <string name="activity_import_local_contacts_title">本地联系人</string>
+
+    <!-- activity note -->
     <string name="activity_note_title">短信内容</string>
     <string name="activity_note_button">保存</string>
-    
+
 </resources>

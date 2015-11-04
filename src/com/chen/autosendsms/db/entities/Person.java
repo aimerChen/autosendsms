@@ -19,19 +19,19 @@ public class Person implements Serializable{
 	private int id;
 	
 	@DatabaseField(defaultValue = "")
-	private String userName;//用于登录
+	private String userName="";//用于登录
 	
 	@DatabaseField(canBeNull=false)
-	private String phoneNumber;
+	private String phoneNumber="";
 	
 	@DatabaseField(defaultValue = "")
-	private String nickName;//昵称
+	private String nickName="";//昵称
 	
 	@DatabaseField(defaultValue = "")
-	private String firstName;
+	private String firstName="";
 	
 	@DatabaseField(defaultValue = "")
-	private String lastName;
+	private String lastName="";
 	
 	@DatabaseField(columnName="birthday")
 	private long birthday=0;
@@ -43,10 +43,10 @@ public class Person implements Serializable{
 	private int workAge=0;//工龄
 	
 	@DatabaseField(defaultValue = "")
-	private String department;//科室
+	private String department="";//科室
 	
 	@DatabaseField(defaultValue = "")
-	private String note;//备注
+	private String note="";//备注
 	
 	@DatabaseField
 	private long dateSendSMS=0;//发送短信的日期
